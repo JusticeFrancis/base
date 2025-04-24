@@ -16,8 +16,12 @@ const AddParish = ({ open, setOpen,loader, setLoader }) => {
     type: 'parish_admin',
     email:'',
     phone_number: '',
-    location : ''
+    location : '',
+    
   })
+
+
+ 
 
 
 

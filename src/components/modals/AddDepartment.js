@@ -10,18 +10,18 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AddProvince = ({ open, setOpen, loader, setLoader }) => {
+const AddDepartment = ({ open, setOpen, loader, setLoader }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const navigate = useNavigate();
 
-  const [province, setProvince] = useState({
+  const [department, setDepartment] = useState({
     name: "",
-    password: "1234",
-    type: "province_admin",
-    email: "",
-    phone_number: "",
-    location: "",
+    meeting_location: "",
+    meeting_time: "",
+    meeting_day: "",
+    leader: "",
+    description:''
   });
 
   return (
@@ -42,13 +42,67 @@ const AddProvince = ({ open, setOpen, loader, setLoader }) => {
 
         <div className="lg:text-[16px]  text-[15px] font-semibold mb-4">
           {" "}
-          Add Province
+          Add Department
         </div>
         <div className="flex justify-center">
           <div className="lg:space-y-5 space-y-3">
             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                Name
+                Province
+              </div>
+
+              <div className="lg:w-[300px] w-full">
+                <Select
+                  IconComponent={KeyboardArrowDown}
+                  fullWidth
+                  defaultValue={"admin"}
+                  className="mb-2 bg-[#F7F7F8]"
+                  sx={{
+                    fontSize: "14px",
+                    padding: "4px 8px", // Adjust padding here
+                    "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                    "& .MuiSelect-select": {
+                      padding: "4px 8px", // Adjust padding for the text inside Select
+                    },
+                  }}
+                >
+                  <MenuItem value="admin">Province 1</MenuItem>
+                  <MenuItem value="user">Province 2</MenuItem>
+                  <MenuItem value="owner">Province 3</MenuItem>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Parish
+              </div>
+
+              <div className="lg:w-[300px] w-full">
+                <Select
+                  IconComponent={KeyboardArrowDown}
+                  fullWidth
+                  defaultValue={"admin"}
+                  className="mb-2 bg-[#F7F7F8]"
+                  sx={{
+                    fontSize: "14px",
+                    padding: "4px 8px", // Adjust padding here
+                    "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                    "& .MuiSelect-select": {
+                      padding: "4px 8px", // Adjust padding for the text inside Select
+                    },
+                  }}
+                >
+                  <MenuItem value="admin">Parish 1</MenuItem>
+                  <MenuItem value="user">Parish 2</MenuItem>
+                  <MenuItem value="owner">Parish 3</MenuItem>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Department Name
               </div>
 
               <div className="lg:w-[300px] w-full flex items-center space-x-4">
@@ -59,51 +113,84 @@ const AddProvince = ({ open, setOpen, loader, setLoader }) => {
                     px: 2,
                     fontSize: "14px",
                   }}
-                  value={province.name}
+                  value={department.name}
                   onChange={(e) => {
-                    setProvince({ ...province, name: e.target.value });
+                    setDepartment({ ...department, name: e.target.value });
                   }}
                 />
               </div>
             </div>
-            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+            <div className="grid lg:grid-cols-3 items-start lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                Email Address
+                Description
               </div>
 
               <div className="lg:w-[300px] w-full">
                 <InputBase
+                  multiline
+                  rows={5}
                   sx={{
                     bgcolor: "#F7F7F8",
                     width: "100%",
                     px: 2,
                     fontSize: "14px",
                   }}
-                  value={province.email}
+                  value={department.description}
                   onChange={(e) => {
-                    setProvince({ ...province, email: e.target.value });
+                    setDepartment({ ...department, description: e.target.value });
                   }}
                 />
               </div>
             </div>
 
+            
+
+            <div className="font-bold">Meeting details</div>
 
             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                Phone Number
+                Day of the week
+              </div>
+
+              <div className="lg:w-[300px] w-full">
+                <Select
+                  IconComponent={KeyboardArrowDown}
+                  fullWidth
+                  defaultValue={"admin"}
+                  className="mb-2 bg-[#F7F7F8]"
+                  sx={{
+                    fontSize: "14px",
+                    padding: "4px 8px", // Adjust padding here
+                    "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                    "& .MuiSelect-select": {
+                      padding: "4px 8px", // Adjust padding for the text inside Select
+                    },
+                  }}
+                >
+                  <MenuItem value="admin">Province 1</MenuItem>
+                  <MenuItem value="user">Province 2</MenuItem>
+                  <MenuItem value="owner">Province 3</MenuItem>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Time
               </div>
 
               <div className="lg:w-[300px] w-full">
                 <InputBase
+                  type="number"
                   sx={{
                     bgcolor: "#F7F7F8",
                     width: "100%",
                     px: 2,
                     fontSize: "14px",
                   }}
-                  value={province.phone_number}
+                  value={department.meeting_time}
                   onChange={(e) => {
-                    setProvince({ ...province, phone_number: e.target.value });
+                    setDepartment({ ...department, meeting_time: e.target.value });
                   }}
                 />
               </div>
@@ -122,9 +209,9 @@ const AddProvince = ({ open, setOpen, loader, setLoader }) => {
                     px: 2,
                     fontSize: "14px",
                   }}
-                  value={province.location}
+                  value={department.location}
                   onChange={(e) => {
-                    setProvince({ ...province, location: e.target.value });
+                    setDepartment({ ...department, location: e.target.value });
                   }}
                 />
               </div>
@@ -174,4 +261,4 @@ const AddProvince = ({ open, setOpen, loader, setLoader }) => {
   );
 };
 
-export default AddProvince;
+export default AddDepartment;

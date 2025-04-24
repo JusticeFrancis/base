@@ -1,4 +1,4 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
+import { Circle, KeyboardArrowDown } from "@mui/icons-material";
 import { Button, CircularProgress, InputBase, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
@@ -139,76 +139,66 @@ const BulkSms = () => {
       </div>
 
 
-      <div className=" col-span-2 h-fit mx-[10px] bg-white px-10  pb-2  pt-2">
-        <div className="text-[16px] text-center font-semibold mb-10">
-          {" "}
-          Twilio keys
-        </div>
-
-
-        <div className=" mb-5">
-          <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-            API key
-          </div>
-
-          <div className=" w-full flex items-center space-x-4">
-            <InputBase
-              sx={{
-                bgcolor: "#F7F7F8",
-                width: "100%",
-                px: 2,
-                fontSize: "14px",
-              }}
-            />
-          </div>
-        </div>
-
-        <div className=" mb-5">
-          <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-           API Secret
-          </div>
-
-          <div className=" w-full flex items-center space-x-4">
-          <InputBase
-              sx={{
-                bgcolor: "#F7F7F8",
-                width: "100%",
-                px: 2,
-                fontSize: "14px",
-              }}
-            />
-          </div>
-        </div>
-
-
-
-        <div>
-        <Button
-                 sx={{
-                   textTransform: "none",
-                   bgcolor: "#605BFF",
-                   color: "white",
-                   py: "4px",
-                   px: "40px",
-                   borderRadius: "7px",
-                   fontSize: {lg:"14px", xs:"13px"},
-                 }}
- 
-                 disabled={loader}
-                
-               >
-                 {loader? (
-                           <CircularProgress
-                             size={"1.3rem"}
-                             sx={{ color: "white" }}
-                           />
-                         ) : (
-                           " Save and Change"
-                         )}
-               </Button>
-
-        </div>
-      </div>
+     <div className=" col-span-2 h-fit mx-[10px]    pb-2  pt-2">
+              <div className="text-[16px] text-center font-semibold mb-2">
+                {" "}
+                SMS sent
+              </div>
+    
+              <div className="space-y-3">
+                <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
+                  <div>
+                    <div className="flex items-center justify-between space-x-4">
+                      <div className="text-[15px]">
+                        {" "}
+                        <Circle
+                          sx={{
+                            color: "red",
+                            fontSize: "10px",
+                            position: "relative",
+                            bottom: "2px",
+                          }}
+                        />{" "}
+                        SMS
+                      </div>
+                      <div className="text-[11px] text-gray-500">
+                        11th Jan 2025, 2:15pm
+                      </div>
+                    </div>
+                    <div className="relative bottom-[4px] text-[13px] text-gray-600 leading-4">
+                      Happy Birthday beloved brethrens in Christ , happy birthday.
+                    </div>
+                    <div className="underline text-[13px] ">to 5 members</div>{" "}
+                  </div>
+                </div>
+    
+                <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
+                  <div>
+                    <div className="flex items-center justify-between space-x-4">
+                      <div className="text-[15px]">
+                        {" "}
+                        <Circle
+                          sx={{
+                            color: "green",
+                            fontSize: "10px",
+                            position: "relative",
+                            bottom: "2px",
+                          }}
+                        />{" "}
+                       SMS
+                      </div>
+                      <div className="text-[11px] text-gray-500">
+                        11th Jan 2025, 2:15pm
+                      </div>
+                    </div>
+                    <div className="relative bottom-[4px] text-[13px] text-gray-600 leading-4">
+                      Meeting in Mordern Parish, province 1. For church building.
+                    </div>
+                    <div className="underline text-[13px] ">to 20 members</div>{" "}
+                  </div>
+                </div>
+              </div>
+            </div>
      </div>
     </div>
   );

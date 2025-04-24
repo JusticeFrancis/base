@@ -17,6 +17,12 @@ import {
     Logout,
     Support,
     SupportAgent,
+    Money,
+    Email,
+    Sms,
+    People,
+    Church,
+    Castle,
   } from "@mui/icons-material";
   import React, { useState } from "react";
   import { useLocation, useNavigate } from "react-router-dom";
@@ -81,7 +87,12 @@ import {
                 }}
                 className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
                 {" "}
-                <img src="/icons/call-active.png" className="w-[20px] mr-2" /> Provinces
+                <Castle
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              /> Provinces
               </div>
             ) : (
               <div
@@ -92,10 +103,12 @@ import {
                 }}
               >
                 {" "}
-                <img
-                  src="/icons/call-inactive.png"
-                  className="w-[20px] mr-2"
-                />{" "}
+                <Castle
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
               Provinces
               </div>
             )}
@@ -108,10 +121,12 @@ import {
               }}
               className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
-              <img
-                src="/icons/dailer-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Church
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
              Parishes
             </div>
           ) : (
@@ -123,10 +138,12 @@ import {
               }}
             >
               {" "}
-              <img
-                src="/icons/dailer-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Church
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
              Parishes
             </div>
           )}
@@ -139,10 +156,12 @@ import {
               }}
               className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
-              <img
-                src="/icons/notification-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <People
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Members
             </div>
           ) : (
@@ -154,10 +173,12 @@ import {
               }}
             >
               {" "}
-              <img
-                src="/icons/notification-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <People
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Members
             </div>
           )}
@@ -170,10 +191,12 @@ import {
               }}
               className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
-              <img
-                src="/icons/microphone-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Sms
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Bulk Sms
             </div>
           ) : (
@@ -185,10 +208,12 @@ import {
               }}
             >
               {" "}
-              <img
-                src="/icons/microphone-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Sms
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Bulk Sms
             </div>
           )}
@@ -201,10 +226,12 @@ import {
               }}
               className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
-              <img
-                src="/icons/settings-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Email
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Bulk Emails
             </div>
           ) : (
@@ -216,10 +243,12 @@ import {
               }}
             >
               {" "}
-              <img
-                src="/icons/settings-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Email
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
             Bulk Emails
             </div>
           )}
@@ -233,10 +262,12 @@ import {
               }}
               className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
-              <img
-                src="/icons/settings-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
+              <Money
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
              Remmittance
             </div>
           ) : (
@@ -248,11 +279,43 @@ import {
               }}
             >
               {" "}
+              <Money
+              sx={{ 
+                fontSize:'20px',
+                mr:'9px'
+              }}
+              />
+             Remmittance
+            </div>
+          )}
+          {location.pathname.startsWith('/dashboard/settings') ? (
+            <div
+              onClick={() => {
+                setOpen(false);
+                navigate("/dashboard/settings");
+              }}
+              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              {" "}
+              <img
+                src="/icons/settings-active.png"
+                className="w-[20px] mr-2"
+              />{" "}
+             Settings
+            </div>
+          ) : (
+            <div
+              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              onClick={() => {
+                setOpen(false);
+                navigate("/dashboard/settings");
+              }}
+            >
+              {" "}
               <img
                 src="/icons/settings-inactive.png"
                 className="w-[20px] mr-2"
               />{" "}
-             Remmittance
+             Settings
             </div>
           )}
         </div>

@@ -1,9 +1,15 @@
 import {
+  Castle,
+  Church,
   Dashboard as DashboardIcon,
+  Email,
   ErrorOutline,
   KeyboardArrowRight,
   Logout,
   Menu as MenuIcon,
+  Money,
+  People,
+  Sms,
 } from "@mui/icons-material";
 import {
   Box,
@@ -23,6 +29,7 @@ import Members from "./dashboard/Members";
 import BulkSms from "./dashboard/BulkSms";
 import BulkEmail from "./dashboard/BulkEmail";
 import Remittance from "./dashboard/Remittance";
+import Settings from "./dashboard/Settings";
 
 const Dashboard = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -54,10 +61,7 @@ const Dashboard = () => {
   };
   return (
     <div>
-      <Sidebar
-          open={openSidebar}
-          setOpen={setOpenSidebar}
-        />
+      <Sidebar open={openSidebar} setOpen={setOpenSidebar} />
       {loadState ? (
         <div
           className="bg-white"
@@ -140,15 +144,17 @@ const Dashboard = () => {
             <div className="text-[20px] font-normal  text-center mx-auto flex items-center space-x-2  ">
               <img src="/icons/login_img.png" className="w-[30px] hidden" />
               <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                <img src="/icons/login_img.png" className="w-[30px]" />  <div>RCCG Region 1</div>
-                </div>
+                <img src="/icons/login_img.png" className="w-[30px]" />{" "}
+                <div>RCCG Region 1</div>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-12">
             <div className="col-span-2 w-[220px]   flex-col min-h-[100vh] h-full hidden lg:flex ">
               <div className="bg-white relative  min-h-[100vh] h-full ">
                 <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                <img src="/icons/login_img.png" className="w-[30px]" />  <div>RCCG Region 1</div>
+                  <img src="/icons/login_img.png" className="w-[30px]" />{" "}
+                  <div>RCCG Region 1</div>
                 </div>
                 <div className="text-[16px] pr-6 space-y-3  flex-1">
                   {location.pathname === "/dashboard" ||
@@ -182,7 +188,7 @@ const Dashboard = () => {
                     </div>
                   )}
 
-                  {location.pathname.startsWith("/dashboard/provinces")? (
+                  {location.pathname.startsWith("/dashboard/provinces") ? (
                     <div
                       onClick={() => {
                         navigate("/dashboard/provinces");
@@ -190,10 +196,12 @@ const Dashboard = () => {
                       className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/call-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Castle
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Provinces{" "}
                     </div>
                   ) : (
@@ -204,10 +212,12 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
-                      <img
-                        src="/icons/call-inactive.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Castle
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Provinces{" "}
                     </div>
                   )}
@@ -220,10 +230,12 @@ const Dashboard = () => {
                       className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/dailer-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Church
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Parishes
                     </div>
                   ) : (
@@ -234,10 +246,12 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
-                      <img
-                        src="/icons/dailer-inactive.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Church
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Parishes
                     </div>
                   )}
@@ -250,10 +264,12 @@ const Dashboard = () => {
                       className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/notification-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <People
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Members
                     </div>
                   ) : (
@@ -264,10 +280,12 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
-                      <img
-                        src="/icons/notification-inactive.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <People
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Members
                     </div>
                   )}
@@ -280,10 +298,12 @@ const Dashboard = () => {
                       className=" cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/microphone-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Sms
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Bulk Sms
                     </div>
                   ) : (
@@ -294,10 +314,12 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
-                      <img
-                        src="/icons/microphone-inactive.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
+                      <Sms
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
                       Bulk Sms
                     </div>
                   )}
@@ -310,11 +332,13 @@ const Dashboard = () => {
                       className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/settings-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
-                     Bulk Email
+                      <Email
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
+                      Bulk Email
                     </div>
                   ) : (
                     <div
@@ -324,11 +348,13 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
-                      <img
-                        src="/icons/settings-inactive.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
-                     Bulk Email
+                      <Email
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
+                      Bulk Email
                     </div>
                   )}
 
@@ -340,11 +366,13 @@ const Dashboard = () => {
                       className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
-                      <img
-                        src="/icons/settings-active.png"
-                        className="w-[20px] mr-2"
-                      />{" "}
-                     Remmittance
+                      <Money
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
+                      Remmittance
                     </div>
                   ) : (
                     <div
@@ -354,11 +382,43 @@ const Dashboard = () => {
                       }}
                     >
                       {" "}
+                      <Money
+                        sx={{
+                          fontSize: "20px",
+                          mr: "9px",
+                        }}
+                      />
+                      Remmittance
+                    </div>
+                  )}
+
+                  {location.pathname.startsWith("/dashboard/settings") ? (
+                    <div
+                      onClick={() => {
+                        navigate("/dashboard/settings");
+                      }}
+                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                    >
+                      {" "}
+                      <img
+                        src="/icons/settings-active.png"
+                        className="w-[20px] mr-2"
+                      />{" "}
+                      Settings
+                    </div>
+                  ) : (
+                    <div
+                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      onClick={() => {
+                        navigate("/dashboard/settings");
+                      }}
+                    >
+                      {" "}
                       <img
                         src="/icons/settings-inactive.png"
                         className="w-[20px] mr-2"
                       />{" "}
-                     Remmittance
+                      Settings
                     </div>
                   )}
                 </div>
@@ -408,24 +468,21 @@ const Dashboard = () => {
 
                 <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
                   <div className=" text-[14px]  font-semibold flex">
-                    
-                         Admin <span className="text-[13px] font-normal">(Province)</span>
-                   
-                    <img src="/icons/Logout.png" className="w-[20px] ml-2 cursor-pointer" 
-              onClick={()=> {
-                localStorage.clear('user')
-                localStorage.clear('organization')
-                navigate('/login')
-              }}
-              />{" "}
+                    Admin{" "}
+                    <span className="text-[13px] font-normal">(Province)</span>
+                    <img
+                      src="/icons/Logout.png"
+                      className="w-[20px] ml-2 cursor-pointer"
+                      onClick={() => {
+                        localStorage.clear("user");
+                        localStorage.clear("organization");
+                        navigate("/login");
+                      }}
+                    />{" "}
                   </div>
 
                   <div className="text-[13px] text-black flex items-center justify-between">
-                    <div>
-                      adminrccg@gmail.com
-                    </div>
-
-                   
+                    <div>adminrccg@gmail.com</div>
                   </div>
                 </div>
               </div>
@@ -439,6 +496,7 @@ const Dashboard = () => {
                 <Route path="/bulk-sms" element={<BulkSms />} />
                 <Route path="/bulk-email" element={<BulkEmail />} />
                 <Route path="/remittance" element={<Remittance />} />
+                <Route path="/settings" element={<Settings />} />
               </Routes>
             </div>
           </div>

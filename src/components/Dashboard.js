@@ -156,14 +156,14 @@ const Dashboard = () => {
                   <img src="/icons/login_img.png" className="w-[30px]" />{" "}
                   <div>RCCG Region 1</div>
                 </div>
-                <div className="text-[16px] pr-6 space-y-3  flex-1">
+                <div className="text-[16px]  pr-6 space-y-3  flex-1">
                   {location.pathname === "/dashboard" ||
                   location.pathname.startsWith("/dashboard/call-details") ? (
                     <div
                       onClick={() => {
                         navigate("/dashboard");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer  pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <img
@@ -174,7 +174,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer   pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard");
                       }}
@@ -193,7 +193,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/provinces");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <Castle
@@ -206,7 +206,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9   flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/provinces");
                       }}
@@ -227,7 +227,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/parishes");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <Church
@@ -240,7 +240,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/parishes");
                       }}
@@ -261,7 +261,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/members");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <People
@@ -274,7 +274,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/members");
                       }}
@@ -295,7 +295,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/bulk-sms");
                       }}
-                      className=" cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className=" cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <Sms
@@ -308,7 +308,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/bulk-sms");
                       }}
@@ -329,7 +329,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/bulk-email");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <Email
@@ -342,7 +342,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/bulk-email");
                       }}
@@ -363,7 +363,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/remittance");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <Money
@@ -376,7 +376,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/remittance");
                       }}
@@ -397,7 +397,7 @@ const Dashboard = () => {
                       onClick={() => {
                         navigate("/dashboard/settings");
                       }}
-                      className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
                     >
                       {" "}
                       <img
@@ -408,7 +408,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                       onClick={() => {
                         navigate("/dashboard/settings");
                       }}
@@ -487,7 +487,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-10 col-span-12 pb-2 ">
+            <div className="lg:col-span-10 col-span-12  lg:py-2 pb-2 lg:px-12 ">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/provinces" element={<Province />} />

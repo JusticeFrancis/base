@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-ro
 import CreateRegion from './components/auth/CreateRegion'
 import Login from './components/auth/Login'
 import Dashboard from './components/Dashboard'
+import MemberForm from './components/forms/MemberForm'
 
 const Main = () => {
   
@@ -10,6 +11,7 @@ const Main = () => {
    <>      
     <BrowserRouter>
             <Routes>
+            <Route path="/member-form" element={<MemberForm/>} />
               <Route path="/register" element={<CreateRegion/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/dashboard/*" element={<Dashboard/>} />

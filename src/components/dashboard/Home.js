@@ -42,7 +42,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="bg-white flex space-x-3 w-full rounded-md shadow-xs  px-12 py-4">
+        <div className="bg-white flex space-x-3 w-full rounded-lg  shadow-xs  px-12 py-4">
           <div className="my-auto bg-[#fffaed] p-1 rounded-full">
             <ChurchRounded
               sx={{
@@ -59,7 +59,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="bg-white flex space-x-3 w-full rounded-md shadow-xs  px-12 py-4">
+        <div className="bg-white flex space-x-3 w-full rounded-lg  shadow-xs  px-12 py-4">
           <div className="my-auto bg-[#e6e6f9] p-1 rounded-full">
             <PeopleAlt
               sx={{
@@ -103,7 +103,7 @@ const Home = () => {
 
             <div className="space-y-3">
               <div className="flex items-center space-x-4 px-4">
-                <div className="bg-blue-600 rounded-md p-[2px]">
+                <div className="bg-blue-600 rounded-lg  p-[2px]">
                   <Celebration sx={{ color: "white", fontSize: "40px" }} />
                 </div>
 

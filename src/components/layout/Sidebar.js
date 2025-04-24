@@ -56,14 +56,14 @@ import {
                 setOpen(false);
                 navigate("/dashboard");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <img src="/icons/dash-active.png" className="w-[20px] mr-2" />{" "}
               Dashboard{" "}
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard");
@@ -85,7 +85,7 @@ import {
                   setOpen(false);
                   navigate("/dashboard/Provinces");
                 }}
-                className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+                className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
                 {" "}
                 <Castle
               sx={{ 
@@ -96,7 +96,7 @@ import {
               </div>
             ) : (
               <div
-                className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+                className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
                 onClick={() => {
                   setOpen(false);
                   navigate("/dashboard/Provinces");
@@ -119,7 +119,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/Parishes");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <Church
               sx={{ 
@@ -131,7 +131,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/Parishes");
@@ -154,7 +154,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/members");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <People
               sx={{ 
@@ -166,7 +166,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/members");
@@ -189,7 +189,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/bulk-sms");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <Sms
               sx={{ 
@@ -201,7 +201,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/bulk-sms");
@@ -224,7 +224,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/bulk-email");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <Email
               sx={{ 
@@ -236,7 +236,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/bulk-email");
@@ -260,7 +260,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/remittance");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <Money
               sx={{ 
@@ -272,7 +272,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/remittance");
@@ -294,7 +294,7 @@ import {
                 setOpen(false);
                 navigate("/dashboard/settings");
               }}
-              className="cursor-pointer flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
               {" "}
               <img
                 src="/icons/settings-active.png"
@@ -304,7 +304,7 @@ import {
             </div>
           ) : (
             <div
-              className="cursor-pointer flex items-center py-2 px-3 text-[#7f7f92]"
+              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
               onClick={() => {
                 setOpen(false);
                 navigate("/dashboard/settings");
@@ -418,7 +418,7 @@ import {
         <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
                           <div className=" text-[14px]  font-semibold flex"  >
                           Admin <span className="text-[13px] font-normal">(Province)</span>
-                            <img src="/icons/Logout.png" className="w-[20px] ml-2 cursor-pointer" 
+                            <img src="/icons/Logout.png" className="w-[20px] ml-2 cursor-pointer pl-9" 
                     onClick={()=> {
                       localStorage.clear('user')
                       localStorage.clear('organization')

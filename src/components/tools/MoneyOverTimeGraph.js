@@ -54,7 +54,7 @@ const MoneyOverTimeGraph = ({ data }) => {
 
   return (
     <motion.div
-      className="bg-white rounded-2xl p-6 shadow-lg w-full "
+      className="bg-white rounded-2xl lg:p-6 p-1 shadow-lg w-full "
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >

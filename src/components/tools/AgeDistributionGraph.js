@@ -43,7 +43,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 export default function AgeDistributionChart() {
   return (
     <motion.div
-      className="w-full max-w-4xl p-6 mx-auto bg-white rounded-2xl shadow-lg"
+      className="w-full max-w-4xl lg:p-6 p-1 mx-auto bg-white rounded-2xl shadow-lg"
       initial="hidden"
       animate="visible"
       variants={chartVariants}

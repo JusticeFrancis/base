@@ -31,7 +31,7 @@ const MemberForm = () => {
           </div>
         </div>
        <div className=" flex justify-center w-full">
-       <div className=" flex flex-wrap justify-center     gap-4 ">
+       <div className=" lg:flex lg:flex-wrap justify-center     gap-4 ">
               <div className=" ">
                 <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
                   Province
@@ -417,7 +417,7 @@ const MemberForm = () => {
                     fontSize: { lg: "14px", xs: "13px" },
                   }}
                 >
-                    Save
+                    Create Member
                 </Button>
               </div>
             </div>

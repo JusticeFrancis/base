@@ -11,7 +11,7 @@ const Main = () => {
    <>      
     <BrowserRouter>
             <Routes>
-            <Route path="/member-form" element={<MemberForm/>} />
+            <Route path="/membership-form" element={<MemberForm/>} />
               <Route path="/register" element={<CreateRegion/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/dashboard/*" element={<Dashboard/>} />

@@ -1,21 +1,75 @@
 import { ErrorOutline } from "@mui/icons-material";
 import { Button, Checkbox, CircularProgress, InputBase } from "@mui/material";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CreateRegion = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [region, setRegion] = useState({
+    logo : null,
     name: "",
     location: "",
     email: "",
-    twilio_account_sid: "",
-    twilio_account_api_key: "",
+    appPassword: "",
+    twilioAccountSID: "",
+    twilioApiKey: "",
     password: "",
     agreed: false,
   });
+
+  useEffect(()=> {
+      if(localStorage.getItem('access')){
+        navigate('/dashboard')
+      }
+    },[])
+
+  const createRegion = async()=> {
+
+    if(region.agreed){
+      try {
+
+        setLoader(true)
+
+        const formData = new FormData();
+    formData.append('image', region.logo);
+        let img = await  axios.post(process.env.REACT_APP_BACKEND_URL+'upload',formData)
+
+
+        console.log(img.data)
+
+        let response = await axios.post(process.env.REACT_APP_BACKEND_URL+'region/create',{
+          ...region,
+          logo:img.data.imageUrl
+        }).then((res)=> {
+          toast('success')
+          setLoader(false)
+          console.log(res)
+          localStorage.setItem('region', JSON.stringify(res.data.region))
+          localStorage.setItem('access', JSON.stringify(res.data.access))
+          navigate('/dashboard')
+        })
+      .catch((err)=> {
+            toast(err?.response?.data?.error)
+            setLoader(false)
+            console.log(err)
+          })
+        
+   
+     
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }else{
+      console.log('please agree')
+    }
+  }
+
+  
   return (
     <div>
       <div className="grid lg:grid-cols-4">
@@ -33,7 +87,44 @@ const CreateRegion = () => {
             </div>
           )}
 
-          <div className="space-y-2 mb-3 mt-[70px]">
+<div className="mt-[70px] mb-3 flex items-center space-x-4 " >
+  <input hidden type="file" accept="image/*" id='logo'
+  
+  onChange={(e)=> {
+
+    let file = e.target.files[0]
+    setRegion({...region, logo: file })
+
+  }}/>
+
+ 
+<Button
+onClick={()=> {
+  let logo = document.getElementById('logo')
+  logo.click()
+}}
+              sx={{
+                textTransform: "none",
+                bgcolor: "#605BFF",
+                color: "white",
+                py: "2px",
+                px: "20px",
+                borderRadius: "7px",
+                fontSize: { lg: "14px", xs: "13px" },
+                width: "fit",
+              }}
+              disabled={loader}
+            >
+              {loader ? (
+                <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
+              ) : (
+                "Upload logo"
+              )}
+            </Button>
+            <img src={region.logo &&  URL.createObjectURL(region.logo)}  className="w-[50px] border-[1px] rounded-full" />
+          </div>
+
+          <div className="space-y-2 mb-3 ">
             <div className=" lg:text-[14px] text-[13px] ">Region Name</div>
             <InputBase
               value={region.name}
@@ -55,9 +146,9 @@ const CreateRegion = () => {
           <div className="space-y-2 mb-3 ">
             <div className=" lg:text-[14px] text-[13px] ">Region Location</div>
             <InputBase
-              value={region.name}
+              value={region.location}
               onChange={(e) => {
-                setRegion({ ...region, name: e.target.value });
+                setRegion({ ...region, location: e.target.value });
               }}
               placeholder="johnmichael@example.com"
               sx={{
@@ -170,6 +261,7 @@ const CreateRegion = () => {
                 width: "100%",
               }}
               disabled={loader}
+              onClick={createRegion}
             >
               {loader ? (
                 <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />

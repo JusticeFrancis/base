@@ -5,18 +5,71 @@ import {
   NotificationsActive,
   PeopleAlt,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MoneyOverTimeGraph from "../tools/MoneyOverTimeGraph";
 import GenderDonutChart from "../tools/GenderGraph";
 import AgeDistributionChart from "../tools/AgeDistributionGraph";
+import axios from "axios";
 
 const Home = () => {
+  console.log('access',JSON.parse(localStorage.getItem('access')))
+  const [region, setRegion] = useState(JSON.parse(localStorage.getItem('region')))
+  const [provinces , setProvinces] = useState([])
+  const [parishes, setParishes] = useState([])
+  const [members, setMembers] = useState([])
+  const [remittances,setRemittances] = useState([])
+
+  //get analytics
+
+  const getProvinces = async() => {
+    let provinces = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-provinces',{
+      region_id : region._id
+    })
+    console.log(provinces.data)
+    setProvinces(provinces.data?.provinces || [])
+  }
+
+
+  const getParishes = async() => {
+    let parishes = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-parishes',{
+      region_id : region._id
+    })
+    console.log(parishes.data)
+    setParishes(parishes.data?.parishes || [])
+  }
+
+
+  const getRemittances = async() => {
+    let res = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-remittances',{
+      region_id : region._id
+    })
+    console.log(res.data)
+    setRemittances(res.data?.remittances || [])
+  }
+
+  const getMembers = async() => {
+    let memebers = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-members',{
+      region_id : region._id
+    })
+    console.log(memebers.data)
+    setMembers(memebers.data?.members || [])
+  }
+
+
+  useEffect(()=> {
+getProvinces()
+getParishes()
+getMembers()
+getRemittances()
+  },[])
+
+
   return (
     <div className="pt-7 px-4">
       <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">
         <div>Dashboard</div>
 
-        <div className=" text-green-700">$140,0000</div>
+        <div className=" text-green-700">$ {remittances.reduce((sum, remit) => sum + remit.amount, 0)}</div>
       </div>
 
       {/* <div className="pt-7 px-4">
@@ -37,7 +90,7 @@ const Home = () => {
             />
           </div>
           <div className="my-auto">
-            <div className="text-[18px] font-bold">100</div>
+            <div className="text-[18px] font-bold">{provinces.length}</div>
             <div className="text-[15px] text-gray-600">Provinces</div>
           </div>
         </div>
@@ -54,7 +107,7 @@ const Home = () => {
             />
           </div>
           <div className="my-auto">
-            <div className="text-[18px] font-bold">100</div>
+            <div className="text-[18px] font-bold">{parishes.length}</div>
             <div className="text-[15px] text-gray-600">Parishes</div>
           </div>
         </div>
@@ -71,7 +124,7 @@ const Home = () => {
             />
           </div>
           <div className="my-auto">
-            <div className="text-[18px] font-bold">100</div>
+            <div className="text-[18px] font-bold">{members.length}</div>
             <div className="text-[15px] text-gray-600">Members</div>
           </div>
         </div>
@@ -79,30 +132,35 @@ const Home = () => {
 
       <div className="lg:grid lg: grid-cols-4 gap-4">
         <div className="lg:col-span-3">
-          <MoneyOverTimeGraph data={sampleData} />
+        <MoneyOverTimeGraph
+  data={remittances?.map(remit => ({
+    timestamp: remit.createdAt,
+    amount: remit.amount
+  }))}
+/>
         </div>
 
         <div className="mt-4 lg:mt-0">
-          <GenderDonutChart />
+          <GenderDonutChart members={members} />
         </div>
       </div>
 
       <div className="lg:grid lg:grid-cols-5 gap-4 mt-4">
         <div className="lg:col-span-3">
-          <AgeDistributionChart data={sampleData} />
+          <AgeDistributionChart members={members} />
         </div>
 
         <div className="lg:col-span-2 mt-4">
           <div className="bg-white shadow-lg rounded-lg px-4 py-3">
             <div className="text-[15px font-semibold py-4  flex justify-between items-center">
-             <div> Activities (10){" "}</div>
-              <div className="underline hover:text-blue-700 cursor-pointer text-[13px] font-normal">
+             <div> Activities {" "}</div>
+              {/* <div className="underline hover:text-blue-700 cursor-pointer text-[13px] font-normal">
                 see more
-              </div>{" "}
+              </div>{" "} */}
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center space-x-4 px-4">
+              {/* <div className="flex items-center space-x-4 px-4">
                 <div className="bg-blue-600 rounded-lg  p-[2px]">
                   <Celebration sx={{ color: "white", fontSize: "40px" }} />
                 </div>
@@ -117,7 +175,7 @@ const Home = () => {
                     to wish them
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-center space-x-4 px-4">
                 <div className="bg-green-600 rounded-md p-[2px]">

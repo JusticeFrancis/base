@@ -32,6 +32,15 @@ import Remittance from "./dashboard/Remittance";
 import Settings from "./dashboard/Settings";
 
 const Dashboard = () => {
+   const [region, setRegion] = useState(JSON.parse(localStorage.getItem('region')))
+    const [access, setAccess] = useState(JSON.parse(localStorage.getItem('access')))
+    useEffect(()=>{
+
+      if(!localStorage.getItem('access')){
+        navigate('/login')
+      }
+
+    },[])
   const [openSidebar, setOpenSidebar] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -144,8 +153,8 @@ const Dashboard = () => {
             <div className="text-[20px] font-normal  text-center mx-auto flex items-center space-x-2  ">
               <img src="/icons/login_img.png" className="w-[30px] hidden" />
               <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                <img src="/icons/login_img.png" className="w-[30px]" />{" "}
-                <div>RCCG Region 1</div>
+                <img src={region?.logo} className="w-[30px]" />{" "}
+                <div>{region?.name}</div>
               </div>
             </div>
           </div>
@@ -153,8 +162,8 @@ const Dashboard = () => {
             <div className="col-span-2 w-[220px]   flex-col min-h-[100vh] h-full hidden lg:flex ">
               <div className="bg-white relative  min-h-[100vh] h-full ">
                 <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                  <img src="/icons/login_img.png" className="w-[30px]" />{" "}
-                  <div>RCCG Region 1</div>
+                  <img src={region?.logo} className="w-[30px]" />{" "}
+                  <div>{region?.name}</div>
                 </div>
                 <div className="text-[16px]  pr-6 space-y-3  flex-1">
                   {location.pathname === "/dashboard" ||
@@ -290,7 +299,7 @@ const Dashboard = () => {
                     </div>
                   )}
 
-                  {location.pathname.startsWith("/dashboard/bulk-sms") ? (
+                  {/* {location.pathname.startsWith("/dashboard/bulk-sms") ? (
                     <div
                       onClick={() => {
                         navigate("/dashboard/bulk-sms");
@@ -322,7 +331,7 @@ const Dashboard = () => {
                       />
                       Bulk Sms
                     </div>
-                  )}
+                  )} */}
 
                   {location.pathname.startsWith("/dashboard/bulk-email") ? (
                     <div
@@ -467,22 +476,22 @@ const Dashboard = () => {
                   </div> */}
 
                 <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
-                  <div className=" text-[14px]  font-semibold flex">
-                    Admin{" "}
-                    <span className="text-[13px] font-normal">(Province)</span>
+                  <div className=" text-[14px]  font-semibold flex capitalize">
+                  {access?.access_level}
+                    {/* <span className="text-[13px] font-normal">(Province)</span> */}
                     <img
                       src="/icons/Logout.png"
                       className="w-[20px] ml-2 cursor-pointer"
                       onClick={() => {
-                        localStorage.clear("user");
-                        localStorage.clear("organization");
+                        localStorage.clear('region')
+                      localStorage.clear('access')
                         navigate("/login");
                       }}
                     />{" "}
                   </div>
 
                   <div className="text-[13px] text-black flex items-center justify-between">
-                    <div>adminrccg@gmail.com</div>
+                    <div>{access?.email}</div>
                   </div>
                 </div>
               </div>

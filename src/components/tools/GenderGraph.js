@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Legend } from "recharts";
 import { motion } from "framer-motion";
 
@@ -14,7 +14,9 @@ const donutVariants = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
-export default function GenderDonutChart() {
+export default function GenderDonutChart({members}) {
+  const [males, setMales] = useState(members.filter(member => member.gender === 'female').length)
+  const [females, setFemales] = useState(members.filter(member => member.gender === 'female').length)
   return (
     <div className="bg-white shadow-md py-4 rounded-lg">
          <div  className="text-center text-[17px] font-bold">Gender Distribution</div>

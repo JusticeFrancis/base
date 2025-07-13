@@ -183,7 +183,7 @@ import {
             </div>
           )}
   
-          {location.pathname.startsWith('/dashboard/bulk-sms') ? (
+          {/* {location.pathname.startsWith('/dashboard/bulk-sms') ? (
             <div
               onClick={() => {
                 setOpen(false);
@@ -216,7 +216,7 @@ import {
               />
             Bulk Sms
             </div>
-          )}
+          )} */}
   
           {location.pathname.startsWith('/dashboard/bulk-email') ? (
             <div
@@ -420,8 +420,8 @@ import {
                           Admin <span className="text-[13px] font-normal">(Province)</span>
                             <img src="/icons/Logout.png" className="w-[20px] ml-2 cursor-pointer pl-9" 
                     onClick={()=> {
-                      localStorage.clear('user')
-                      localStorage.clear('organization')
+                      localStorage.clear('region')
+                      localStorage.clear('access')
                       navigate('/login')
                     }}
                     />{" "}

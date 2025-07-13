@@ -9,17 +9,21 @@ import {
   Select,
   Switch,
 } from "@mui/material";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const AddMembers = ({ open, setOpen, loader, setLoader }) => {
+const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selectedMember,getMembers1 }) => {
   const [errorMsg, setErrorMsg] = useState(null);
+
 
   const navigate = useNavigate();
 
   const [family, setFamily] = useState(false);
 
   const [member, setMember] = useState({
+    gender: 'male',
     first_name: "",
     last_name: "",
     password: "1234",
@@ -30,8 +34,149 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
     spouse_name: "",
     number_of_children: "",
     address: "",
-    baptised: false
+    baptised: false,
+    province: null,
+    parish: null,
+    volunteerInterest: null,
+    age: 0,
+    staffDepartment: null
   });
+
+
+  useEffect(() => {
+    setMember({
+      gender: edit ? selectedMember.gender : 'male',
+    first_name: edit ? selectedMember.name.split(" ")[0] : "",
+    last_name: edit ? selectedMember.name.split(" ")[1] :  "",
+    type: (edit && selectedMember.staff) ? 'staff' : 'member',
+    email: edit ? selectedMember.email : '',
+    phone_number: edit ? selectedMember.phoneNumber : "",
+    spouse_name: edit ? selectedMember.spouseName : "",
+    number_of_children: edit ? selectedMember.numberOfChildren : "",
+    address: edit ? selectedMember.address : "",
+    baptised: edit ? selectedMember.baptismalStatus : false,
+    province: edit ? selectedMember.province_id : null,
+    parish:  edit ? selectedMember.parish_id : null,
+    volunteerInterest: edit ? selectedMember.volunteerInterest : null,
+    age:  edit ? selectedMember.age :  0,
+    staffDepartment: edit ? selectedMember.staffDepartment : null
+    })
+  }, [edit , selectedMember])
+  
+
+  const createMember = async() => {
+    setLoader(true)
+    let response = await axios.post(process.env.REACT_APP_BACKEND_URL+ 'member/create',{
+      name : member.first_name + ' ' + member.last_name,
+      address: member.address,
+      email : member.email,
+      phoneNumber : member.phone_number,
+      gender : member.gender,
+      family,
+      baptismalStatus : member.baptised,
+      spouseName : member.spouse_name,
+      numberOfChildren : member.number_of_children,
+      volunteerInterest : member.volunteerInterest,
+      region_id : region._id,
+      province_id: member.province,
+      parish_id: member.parish  , 
+      age: member.age,
+      staff : member.type =='staff'? true : false,
+      staffDepartment : member.staffDepartment,
+    }).then((res)=> {
+      setLoader(false)
+      setOpen(false)
+      toast('success')
+      getMembers1()
+    })
+
+    .catch((err)=>{
+         console.log(err.response.data.error)
+         setLoader(false)
+         toast(err.response.data.error)
+       })
+
+    console.log(response.data)
+  }
+
+  const updateMember = async() => {
+    setLoader(true)
+    let response = await axios.post(process.env.REACT_APP_BACKEND_URL+ 'member/update',{
+      member_id: selectedMember?._id,
+      name : member.first_name + ' ' + member.last_name,
+      address: member.address,
+      email : member.email,
+      phoneNumber : member.phone_number,
+      gender : member.gender,
+      family,
+      baptismalStatus : member.baptised,
+      spouseName : member.spouse_name,
+      numberOfChildren : member.number_of_children,
+      volunteerInterest : member.volunteerInterest,
+      region_id : region._id,
+      province_id: member.province,
+      parish_id: member.parish  , 
+      age: member.age,
+      staff : member.type =='staff'? true : false,
+      staffDepartment : member.staffDepartment,
+    })
+    .then((res)=> {
+      setLoader(false)
+      setOpen(false)
+      toast('success')
+      getMembers1()
+    })
+
+    .catch((err)=>{
+         console.log(err.response.data.error)
+         setLoader(false)
+         toast(err.response.data.error)
+       })
+
+
+
+    console.log(response.data)
+  }
+    const [region, setRegion] = useState(JSON.parse(localStorage.getItem('region')))
+
+  const [provinces , setProvinces] = useState([])
+  const [parishes, setParishes] = useState([])
+  const [members, setMembers] = useState([])
+
+  //get analytics
+
+  const getProvinces = async() => {
+    let provinces = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-provinces',{
+      region_id : region._id
+    })
+    console.log(provinces.data)
+    setProvinces(provinces.data?.provinces || [])
+  }
+
+
+  const getParishes = async() => {
+    let parishes = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-parishes',{
+      region_id : region._id
+    })
+    console.log(parishes.data)
+    setParishes(parishes.data?.parishes || [])
+  }
+
+  const getMembers = async() => {
+    let memebers = await axios.post(process.env.REACT_APP_BACKEND_URL+'get-members',{
+      region_id : region._id
+    })
+    console.log(memebers.data)
+    setMembers(parishes.data?.members || [])
+  }
+
+
+  useEffect(()=> {
+getProvinces()
+getParishes()
+getMembers()
+  },[])
+
 
   return (
     <Dialog
@@ -40,6 +185,10 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
       maxWidth={"sm"}
       BackdropProps={{
         style: { backgroundColor: "rgba(0, 0, 0, 0.2)" }, // Adjust opacity here
+      }}
+      onClose={()=>{
+        setEdit(false)
+        setOpen(false)
       }}
     >
       <div className="lg:px-8 px-4 py-6 ">
@@ -63,6 +212,10 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
               <div className="lg:w-[300px] w-full">
                 <Select
                   IconComponent={KeyboardArrowDown}
+                  value={member.province}
+                  onChange={(e)=> {
+                    setMember({...member, province: e.target.value})
+                  }}
                   fullWidth
                   defaultValue={"admin"}
                   className="mb-2 bg-[#F7F7F8]"
@@ -75,9 +228,11 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                     },
                   }}
                 >
-                  <MenuItem value="admin">Province 1</MenuItem>
-                  <MenuItem value="user">Province 2</MenuItem>
-                  <MenuItem value="owner">Province 3</MenuItem>
+                  <MenuItem value={null}>No Province</MenuItem>
+                 {provinces?.map((item,index)=> (
+                   <MenuItem value={item._id}>{item.name}</MenuItem>
+                 ))}
+                 
                 </Select>
               </div>
             </div>
@@ -91,7 +246,11 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                 <Select
                   IconComponent={KeyboardArrowDown}
                   fullWidth
-                  defaultValue={"admin"}
+                  defaultValue={null}
+                  value={member.parish}
+                  onChange={(e)=> {
+                    setMember({...member, parish: e.target.value})
+                  }}
                   className="mb-2 bg-[#F7F7F8]"
                   sx={{
                     fontSize: "14px",
@@ -102,9 +261,10 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                     },
                   }}
                 >
-                  <MenuItem value="admin">Parish 1</MenuItem>
-                  <MenuItem value="user">Parish 2</MenuItem>
-                  <MenuItem value="owner">Parish 3</MenuItem>
+                  <MenuItem value={null}>No Parish</MenuItem>
+                 {parishes?.map((item,index)=> (
+                   <MenuItem value={item._id}>{item.name}</MenuItem>
+                 ))}
                 </Select>
               </div>
             </div>
@@ -141,11 +301,15 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
             {member.type == "staff" && (
               <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
                 <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                  Staff Type
+                  Staff Department
                 </div>
 
                 <div className="lg:w-[300px] w-full">
                   <Select
+                    value={member.staffDepartment}
+                    onChange={(e)=> {
+                      setMember({...member, staffDepartment: e.target.value})
+                    }}
                     IconComponent={KeyboardArrowDown}
                     fullWidth
                     defaultValue={"admin"}
@@ -159,8 +323,8 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                       },
                     }}
                   >
-                    <MenuItem value="admin">Finance</MenuItem>
-                    <MenuItem value="user">Media</MenuItem>
+                    <MenuItem value="finance">Finance</MenuItem>
+                    <MenuItem value="media">Media</MenuItem>
                   </Select>
                 </div>
               </div>
@@ -181,7 +345,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   }}
                   value={member.first_name}
                   onChange={(e) => {
-                    setMember({ ...member, last_name: e.target.value });
+                    setMember({ ...member, first_name: e.target.value });
                   }}
                 />
 
@@ -195,6 +359,28 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   value={member.last_name}
                   onChange={(e) => {
                     setMember({ ...member, last_name: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Age
+              </div>
+
+              <div className="lg:w-[300px] w-full">
+                <InputBase
+                  sx={{
+                    bgcolor: "#F7F7F8",
+                    width: "100%",
+                    px: 2,
+                    fontSize: "14px",
+                  }}
+                  type="number"
+                  value={member.age}
+                  onChange={(e) => {
+                    setMember({ ...member, age: e.target.value });
                   }}
                 />
               </div>
@@ -272,14 +458,25 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   <div className="relative bottom-[1.5px] text-[15px]">
                     Male
                   </div>{" "}
-                  <Checkbox />
+                  <Checkbox 
+                    checked={member.gender == 'male' ? true : false}
+                    onClick={(e)=> {
+                      setMember({...member, gender: 'male'})
+                    }}
+                  />
                 </div>
 
                 <div className="flex items-center">
                   <div className="relative bottom-[1.5px] text-[15px]">
                     Female
                   </div>{" "}
-                  <Checkbox />
+                  <Checkbox 
+                  checked={member.gender == 'female' ? true : false}
+                  
+                  onClick={(e)=> {
+                    setMember({...member, gender: 'female'})
+                  }}
+                  />
                 </div>
               </div>
             </div>
@@ -309,7 +506,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   <Switch
                     value={member.baptised}
                     onChange={(e) => {
-                      setMember({...member, baptised: e.target.value});
+                      setMember({...member, baptised: !member.baptised});
                     }}
                   />
                 </div>
@@ -352,9 +549,9 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                         px: 2,
                         fontSize: "14px",
                       }}
-                      value={member.spouse_name}
+                      value={member.number_of_children}
                       onChange={(e) => {
-                        setMember({ ...member, spouse_name: e.target.value });
+                        setMember({ ...member, number_of_children: e.target.value });
                       }}
                     />
                   </div>
@@ -369,6 +566,10 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
 
               <div className="lg:w-[300px] w-full">
                 <Select
+                 value={member.volunteerInterest}
+                 onChange={(e)=> {
+                   setMember({...member, volunteerInterest: e.target.value})
+                 }}
                   IconComponent={KeyboardArrowDown}
                   fullWidth
                   defaultValue={"admin"}
@@ -382,14 +583,14 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                     },
                   }}
                 >
-                  <MenuItem value="admin">Not Interested</MenuItem>
-                  <MenuItem value="user">Media department</MenuItem>
-                  <MenuItem value="user">Youth department</MenuItem>
+                  <MenuItem value="none">Not Interested</MenuItem>
+                  <MenuItem value="media">Media department</MenuItem>
+                  <MenuItem value="youth">Youth department</MenuItem>
                 </Select>
               </div>
             </div>
 
-            {member.type == "staff" && (
+            {/* {member.type == "staff" && (
               <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
                 <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
                   Password
@@ -410,7 +611,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   />
                 </div>
               </div>
-            )}
+            )} */}
 
             <div className="flex justify-center pt-6 pb-4 space-x-2">
               <Button
@@ -430,7 +631,8 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                 Close
               </Button>
 
-              <Button
+            {edit ? (
+                <Button
                 sx={{
                   textTransform: "none",
                   bgcolor: "#605BFF",
@@ -441,6 +643,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   fontSize: { lg: "14px", xs: "13px" },
                 }}
                 disabled={loader}
+                onClick={updateMember}
               >
                 {loader ? (
                   <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
@@ -448,6 +651,27 @@ const AddMembers = ({ open, setOpen, loader, setLoader }) => {
                   " Save"
                 )}
               </Button>
+            ): (
+              <Button
+              sx={{
+                textTransform: "none",
+                bgcolor: "#605BFF",
+                color: "white",
+                py: "4px",
+                px: "40px",
+                borderRadius: "7px",
+                fontSize: { lg: "14px", xs: "13px" },
+              }}
+              disabled={loader}
+              onClick={createMember}
+            >
+              {loader ? (
+                <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
+              ) : (
+                " Save"
+              )}
+            </Button>
+            )}
             </div>
           </div>
         </div>

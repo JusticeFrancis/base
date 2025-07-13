@@ -1,9 +1,19 @@
 import { ErrorOutline } from "@mui/icons-material";
 import { Button, Checkbox, CircularProgress, InputBase } from "@mui/material";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
+ 
+  useEffect(()=> {
+    if(localStorage.getItem('access')){
+      navigate('/dashboard')
+    }
+  },[])
+
+
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -16,6 +26,33 @@ const Login = () => {
     password: "",
     agreed: false,
   });
+
+
+
+  const login = async() => {
+    setLoader(true)
+    let response = await axios.post(process.env.REACT_APP_BACKEND_URL+'region/login', {
+      email : region.email, password : region.password
+    })
+    .then((res)=>{
+      console.log(res.data)
+      setLoader(false)
+      localStorage.setItem('region', JSON.stringify(res.data.region))
+      localStorage.setItem('access', JSON.stringify(res.data.access))
+      navigate('/dashboard')
+
+    })
+    .catch((err)=> {
+      toast(err?.response?.data?.message)
+      setLoader(false)
+      console.log(err)
+    })
+  
+
+    
+   
+
+  }
   return (
     <div>
       <div className="grid lg:grid-cols-4">
@@ -32,6 +69,9 @@ const Login = () => {
               <ErrorOutline sx={{ fontSize: "" }} /> {errorMsg}
             </div>
           )}
+
+
+          
 
 
           <div className="space-y-2 mb-3 mt-[100px]">
@@ -80,7 +120,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between mt-2">
+          {/* <div className="flex items-center justify-between mt-2">
           
             <div
               className="text-[#605BFF] lg:text-[13px] text-[12px] hover:underline cursor-pointer "
@@ -91,7 +131,7 @@ const Login = () => {
             >
               Forgot Password ?
             </div>
-          </div>
+          </div> */}
 
         
           <div className="flex justify-center pt-6 pb-4 space-x-2">
@@ -106,6 +146,7 @@ const Login = () => {
                 fontSize: { lg: "14px", xs: "13px" },
                 width: "100%",
               }}
+              onClick={login}
               disabled={loader}
             >
               {loader ? (
@@ -120,7 +161,7 @@ const Login = () => {
             Dont have an account?{" "}
             <span
               className="text-[#605BFF] hover:underline cursor-pointer "
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/register")}
             >
               {" "}
             Register

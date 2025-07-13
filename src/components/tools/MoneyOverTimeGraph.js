@@ -12,6 +12,7 @@ import { format, parseISO, startOfWeek, startOfMonth } from "date-fns";
 import { motion } from "framer-motion";
 
 const groupBy = (data, type) => {
+
   const grouped = {};
 
   for (const entry of data) {
@@ -32,6 +33,7 @@ const groupBy = (data, type) => {
     grouped[key] += entry.amount;
   }
 
+  console.log(  Object.entries(grouped))
   return Object.entries(grouped).map(([key, amount]) => ({ date: key, amount }));
 };
 
@@ -50,6 +52,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 const MoneyOverTimeGraph = ({ data }) => {
   const [filter, setFilter] = useState("day");
 
+  console.log(data)
   const filteredData = useMemo(() => groupBy(data, filter), [data, filter]);
 
   return (

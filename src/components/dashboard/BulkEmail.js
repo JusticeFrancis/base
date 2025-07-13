@@ -6,12 +6,96 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
+import axios from "axios";
 
 const BulkEmail = () => {
   const [loader, setLoader] = useState(false);
+    const [provinces, setProvinces] = useState([]);
+    const [parishes, setParishes] = useState([]);
+    const [region, setRegion] = useState(
+      JSON.parse(localStorage.getItem("region"))
+    );
+
+    const [access, setAccess] = useState(
+      JSON.parse(localStorage.getItem("access"))
+    );
+
+   
+
+
+  const [bulkEmail, setBulkEmail] = useState({
+    id : access.parish_id || access.province_id || access.region_id,
+    title:'',
+    body:'',
+    access_id: JSON.parse(localStorage.getItem('access'))._id,
+    covers: 'region',
+    province_id: access.province_id,
+    parish_id: access.parish_id
+  })
   const [openTemplateModal, setOpenTemplateModal] = useState(false);
+
+
+ 
+  const getProvinces = async () => {
+    let provinces = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "get-provinces",
+      {
+        region_id: region._id,
+      }
+    ).then((res)=> {
+      setProvinces(res.data?.provinces || []);
+    })
+    .catch((err)=> {
+      console.log(err)
+      
+    })
+    
+  };
+
+  const [emails, setEmails] = useState()
+
+  const getEmails = async () => {
+    let emails = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "email/get",
+      {
+        region_id: region._id,
+      }
+    );
+    setEmails(emails.data?.emails || []);
+  };
+
+
+  const getParishesForProvince = async () => {
+    let response = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "get-parishes-by-province-id",
+      {
+        province_id: bulkEmail.province_id,
+      }
+    ).then((res)=> {
+      setParishes(res.data.parishes);
+    })
+
+    .catch((err)=>{
+      console.log(err)
+    })
+
+    
+  };
+
+
+
+    useEffect(() => {
+      getProvinces();
+      getEmails()
+    }, []);
+  
+    useEffect(() => {
+      if (bulkEmail.province_id) {
+        getParishesForProvince();
+      }
+    }, [bulkEmail.province_id]);
   return (
     <div className="pt-7 px-4 ">
       <TemplateModal
@@ -19,6 +103,9 @@ const BulkEmail = () => {
         setOpen={setOpenTemplateModal}
         loader={loader}
         setLoader={setLoader}
+        bulkEmail={bulkEmail}
+        setBulkEmail={setBulkEmail}
+        getEmails= {getEmails}
       />
       <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">
         <div>Bulk Email</div>
@@ -31,17 +118,27 @@ const BulkEmail = () => {
             Send Bulk Email{" "}
           </div>
 
-          <div className="flex items-center  space-x-4 mb-5">
+          <div className="lg:flex items-center  lg:space-x-4 space-y-4 lg:space-y-0 mb-5">
             <div className="w-full ">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                Province
+                Province  
               </div>
 
               <div className="lg:w-full w-full">
                 <Select
+                  disabled={access.province_id ? true : false}
                   IconComponent={KeyboardArrowDown}
                   fullWidth
-                  defaultValue={"admin"}
+                  defaultValue={'one'}
+                  value={bulkEmail.province_id}
+                onChange={(e) => {
+                  setBulkEmail((prev) => ({
+                    ...prev,
+                    province_id: e.target.value,
+                    id: e.target.value,
+                    covers:'province'
+                  }));
+                }}
                   className="mb-2 bg-[#F7F7F8]"
                   sx={{
                     fontSize: "14px",
@@ -52,9 +149,10 @@ const BulkEmail = () => {
                     },
                   }}
                 >
-                  <MenuItem value="admin">Province 1</MenuItem>
-                  <MenuItem value="user">Province 2</MenuItem>
-                  <MenuItem value="owner">Province 3</MenuItem>
+                   <MenuItem value={'one'} disabled>All Provinces</MenuItem>
+                {provinces?.map((item, index) => (
+                                 <MenuItem value={item._id}>{item.name}</MenuItem>
+                               ))}
                 </Select>
               </div>
             </div>
@@ -66,9 +164,20 @@ const BulkEmail = () => {
 
               <div className="lg:w-full w-full">
                 <Select
+                 disabled={access.parish_id ? true : false}
                   IconComponent={KeyboardArrowDown}
                   fullWidth
-                  defaultValue={"admin"}
+                  defaultValue={"one"}
+                  value={bulkEmail.parish_id}
+                  onChange={(e) => {
+                    setBulkEmail((prev) => ({
+                      ...prev,
+                      parish_id: e.target.value,
+                      id: e.target.value,
+                      covers:'parish'
+                    }));
+                    
+                  }}
                   className="mb-2 bg-[#F7F7F8]"
                   sx={{
                     fontSize: "14px",
@@ -79,9 +188,10 @@ const BulkEmail = () => {
                     },
                   }}
                 >
-                  <MenuItem value="admin">Parish 1</MenuItem>
-                  <MenuItem value="user">Parish 2</MenuItem>
-                  <MenuItem value="owner">Parish 3</MenuItem>
+                   <MenuItem value={'one'} disabled>All Parishes</MenuItem>
+                 {parishes?.map((item, index) => (
+                                  <MenuItem value={item._id}>{item.name}</MenuItem>
+                                ))}
                 </Select>
               </div>
             </div>
@@ -94,6 +204,10 @@ const BulkEmail = () => {
 
             <div className=" w-full flex items-center space-x-4">
               <InputBase
+               value ={bulkEmail.title}
+               onChange={(e)=> {
+                setBulkEmail({...bulkEmail, title: e.target.value})
+               }}
                 sx={{
                   bgcolor: "#F7F7F8",
                   width: "100%",
@@ -111,6 +225,10 @@ const BulkEmail = () => {
 
             <div className=" w-full flex items-center space-x-4">
               <InputBase
+               value ={bulkEmail.body}
+               onChange={(e)=> {
+                setBulkEmail({...bulkEmail, body: e.target.value})
+               }}
                 rows={5}
                 multiline
                 sx={{
@@ -155,7 +273,7 @@ const BulkEmail = () => {
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
+            {/* <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
               <div>
                 <div className="flex items-center justify-between space-x-4">
                   <div className="text-[15px]">
@@ -179,33 +297,42 @@ const BulkEmail = () => {
                 </div>
                 <div className="underline text-[13px] ">to 5 members</div>{" "}
               </div>
-            </div>
+            </div> */}
 
-            <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
-              <div>
-                <div className="flex items-center justify-between space-x-4">
-                  <div className="text-[15px]">
-                    {" "}
-                    <Circle
-                      sx={{
-                        color: "green",
-                        fontSize: "10px",
-                        position: "relative",
-                        bottom: "2px",
-                      }}
-                    />{" "}
-                    General Announcement    
-                  </div>
-                  <div className="text-[11px] text-gray-500">
-                    11th Jan 2025, 2:15pm
-                  </div>
-                </div>
-                <div className="relative bottom-[4px] text-[13px] text-gray-600 leading-4">
-                  Meeting in Mordern Parish, province 1. For church building.
-                </div>
-                <div className="underline text-[13px] ">to 20 members</div>{" "}
-              </div>
-            </div>
+         {emails?.map((item,index)=> (
+             <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
+             <div>
+               <div className="flex items-center justify-between space-x-4">
+                 <div className="text-[15px]">
+                   {" "}
+                   <Circle
+                     sx={{
+                       color: "green",
+                       fontSize: "10px",
+                       position: "relative",
+                       bottom: "2px",
+                     }}
+                   />{" "}
+                 {item?.title}
+                 </div>
+                 <div className="text-[11px] text-gray-500">
+                  {(new Date(item.createdAt)).toLocaleString([], {
+                         year: 'numeric',
+                         month: '2-digit',
+                         day:'2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true, // set to false if you want 24-hour format
+})}
+                 </div>
+               </div>
+               <div className="relative bottom-[4px] text-[13px] text-gray-600 leading-4">
+                {item?.body}
+               </div>
+               <div className="underline text-[13px] ">to {item?.numberOfRecipients} members</div>{" "}
+             </div>
+           </div>
+         ))}
           </div>
         </div>
       </div>

@@ -10,14 +10,6 @@ import {
 } from "recharts";
 import { motion } from "framer-motion";
 
-const ageData = [
-  { ageGroup: "0-18", count: 10 },
-  { ageGroup: "19-25", count: 25 },
-  { ageGroup: "26-35", count: 40 },
-  { ageGroup: "36-45", count: 30 },
-  { ageGroup: "46-60", count: 20 },
-  { ageGroup: "60+", count: 15 },
-];
 
 const chartVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -40,7 +32,29 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-export default function AgeDistributionChart() {
+export default function AgeDistributionChart({members}) {
+  const ageGroups = [
+    { label: "0-18", min: 0, max: 18 },
+    { label: "19-25", min: 19, max: 25 },
+    { label: "26-35", min: 26, max: 35 },
+    { label: "36-45", min: 36, max: 45 },
+    { label: "46-60", min: 46, max: 60 },
+    { label: "60+", min: 61, max: Infinity }
+  ];
+  
+  const ageData = ageGroups.map(group => {
+    const count = members.filter(member =>
+      member.age >= group.min && member.age <= group.max
+    ).length;
+  
+    return {
+      ageGroup: group.label,
+      count
+    };
+  });
+  
+  console.log(ageData);
+  
   return (
     <motion.div
       className="w-full max-w-4xl lg:p-6 p-1 mx-auto bg-white rounded-2xl shadow-lg"

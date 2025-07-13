@@ -7,15 +7,50 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const TemplateModal = ({ open, setOpen, loader, setLoader }) => {
+const TemplateModal = ({ open, setOpen, loader, setLoader, bulkEmail, setBulkEmail, getEmails }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const navigate = useNavigate();
 
   const [template, setTemplate] = useState(1)
+
+  const sendEmail = async () => {
+    console.log(bulkEmail.id)
+    setLoader(true)
+    let email = await axios.post(
+     
+      process.env.REACT_APP_BACKEND_URL + "email/send-email-in-bulk",
+      {
+        ...bulkEmail, template
+      }
+
+   
+    ).then((res)=> {
+      setLoader(false)
+      toast('Successful')
+      setOpen(false)
+     setBulkEmail({
+          id : JSON.parse(localStorage.getItem('region'))._id,
+          title:'',
+          body:'',
+          access_id: JSON.parse(localStorage.getItem('access'))._id,
+          covers: 'region'
+        })
+
+        getEmails()
+      
+    })
+    .catch((err)=> {
+       setLoader(false)
+      toast(err.response.data.error)
+    })
+
+  };
 
   return (
     <Dialog
@@ -37,19 +72,19 @@ const TemplateModal = ({ open, setOpen, loader, setLoader }) => {
           {" "}
           Choose Template
         </div>
-        <div className="flex justify-center">
+        <div className="lg:flex justify-center">
           <div className="lg:space-y-5 space-y-3">
             <div className="flex items-center space-x-3">
               <div 
                 onClick={()=> {
                     setTemplate(1)
                   }}
-              className={ template == 1 ? "border-[1.5px] w-[200px] h-[100px] cursor-pointer  border-purple-700 " : 'border-2 w-[200px] h-[100px] cursor-pointer'  }></div>
+              className={ template == 1 ? "border-[1.5px] w-[200px] h-[100px] cursor-pointer  border-purple-700 bg-purple-400 " : 'border-2 w-[200px] h-[100px] cursor-pointer'  }> </div>
               <div
               onClick={()=> {
                 setTemplate(2)
               }}
-              className={ template == 2  ? "border-[1.5px] w-[200px] h-[100px] cursor-pointer border-purple-700 " : 'border-2 w-[200px] h-[100px] cursor-pointer'  }></div>
+              className={ template == 2  ? "border-[1.5px] w-[200px] h-[100px] cursor-pointer border-blue-700 bg-blue-400 " : 'border-2 w-[200px] h-[100px] cursor-pointer'  }></div>
             </div>
 
 
@@ -82,6 +117,7 @@ const TemplateModal = ({ open, setOpen, loader, setLoader }) => {
                   fontSize: { lg: "14px", xs: "13px" },
                 }}
                 disabled={loader}
+                onClick={sendEmail}
               >
                 {loader ? (
                   <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />

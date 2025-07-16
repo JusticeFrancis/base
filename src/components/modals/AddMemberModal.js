@@ -39,7 +39,8 @@ const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selected
     parish: null,
     volunteerInterest: null,
     age: 0,
-    staffDepartment: null
+    staffDepartment: null,
+    dob : null
   });
 
 
@@ -59,7 +60,8 @@ const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selected
     parish:  edit ? selectedMember.parish_id : null,
     volunteerInterest: edit ? selectedMember.volunteerInterest : null,
     age:  edit ? selectedMember.age :  0,
-    staffDepartment: edit ? selectedMember.staffDepartment : null
+    staffDepartment: edit ? selectedMember.staffDepartment : null,
+    dob : edit ? selectedMember.dob : null
     })
   }, [edit , selectedMember])
   
@@ -83,6 +85,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selected
       age: member.age,
       staff : member.type =='staff'? true : false,
       staffDepartment : member.staffDepartment,
+      dob: member.dob
     }).then((res)=> {
       setLoader(false)
       setOpen(false)
@@ -96,7 +99,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selected
          toast(err.response.data.error)
        })
 
-    console.log(response.data)
+   
   }
 
   const updateMember = async() => {
@@ -119,6 +122,7 @@ const AddMembers = ({ open, setOpen, loader, setLoader, edit , setEdit, selected
       age: member.age,
       staff : member.type =='staff'? true : false,
       staffDepartment : member.staffDepartment,
+      dob : member.dob
     })
     .then((res)=> {
       setLoader(false)
@@ -364,27 +368,62 @@ getMembers()
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
-              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                Age
-              </div>
-
-              <div className="lg:w-[300px] w-full">
-                <InputBase
-                  sx={{
-                    bgcolor: "#F7F7F8",
-                    width: "100%",
-                    px: 2,
-                    fontSize: "14px",
-                  }}
-                  type="number"
-                  value={member.age}
-                  onChange={(e) => {
-                    setMember({ ...member, age: e.target.value });
-                  }}
-                />
-              </div>
-            </div>
+             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+                         {/* Age */}
+                         <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                           Age
+                         </div>
+           
+                         <div className="lg:w-[300px] w-full">
+                           <InputBase
+                             sx={{
+                               bgcolor: "#F7F7F8",
+                               width: "100%",
+                               px: 2,
+                               fontSize: "14px",
+                             }}
+                             type="number"
+                             value={member.age}
+                             disabled // Age is now read-only, auto-calculated from DOB
+                           />
+                         </div>
+           
+                         {/* Date of Birth */}
+                         
+                       </div>
+                       <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+                       <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                           Date of Birth
+                         </div>
+           
+                         <div className="lg:w-[300px] w-full">
+                           <InputBase
+                             sx={{
+                               bgcolor: "#F7F7F8",
+                               width: "100%",
+                               px: 2,
+                               fontSize: "14px",
+                             }}
+                             type="date"
+                             onChange={(e) => {
+                               const dob = new Date(e.target.value);
+                               const now = new Date();
+                               let age = now.getFullYear() - dob.getFullYear();
+                               const m = now.getMonth() - dob.getMonth();
+                               if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) {
+                                 age--;
+                               }
+           
+                               setMember({
+                                 ...member,
+                                 dob: dob.getTime(), // timestamp
+                                 age: age >= 0 ? age : 0, // prevent negative age
+                               });
+                             }}
+                           />
+                         </div>
+                       </div>
+           
             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
                 Email Address

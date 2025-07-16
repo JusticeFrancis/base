@@ -1,5 +1,6 @@
 import {
   Add,
+  Celebration,
   Email,
   HeatPumpSharp,
   Home,
@@ -62,6 +63,31 @@ const Members = () => {
   }, []);
 
   const [open, setOpen] = useState(false);
+
+
+  function formatDOB(timestamp) {
+    const date = new Date(timestamp);
+  
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+  
+    // Get ordinal suffix (st, nd, rd, th)
+    const getOrdinal = (n) => {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return s[(v - 20) % 10] || s[v] || s[0];
+    };
+  
+    const monthNames = [
+      "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+      "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+    ];
+  
+    return `${day}${getOrdinal(day)} ${monthNames[monthIndex]} ${year}`;
+  }
+
+
   return (
     <div className="grid grid-cols-9  lg:px-0 px-4 py-4">
       <AddMembers
@@ -274,6 +300,22 @@ const Members = () => {
               />
             </div>
             <div>{selectedMember?.address}</div>
+          </div>
+          <Divider sx={{ my: 2 }} />
+
+          <div className="flex items-center text-[14px] space-x-1">
+            <div>
+              <Celebration
+                sx={{
+                  color: "gray",
+                  fontSize: "18px",
+                  position: "relative",
+                  bottom: 1,
+                  mr: 1,
+                }}
+              />
+            </div>
+            <div>{ selectedMember?.dob && formatDOB(selectedMember?.dob)}</div>
           </div>
           <Divider sx={{ my: 2 }} />
 

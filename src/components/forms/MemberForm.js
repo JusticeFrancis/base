@@ -61,6 +61,7 @@ const MemberForm = () => {
         age: member.age,
         staff: member.type == "staff" ? true : false,
         staffDepartment: member.staffDepartment,
+        dob: member.dob
       })
       .then((res) => {
         setLoader(false);

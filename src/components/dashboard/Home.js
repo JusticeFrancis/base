@@ -1,15 +1,19 @@
 import {
   Celebration,
   ChurchRounded,
+  Forward,
   HomeFilled,
   NotificationsActive,
   PeopleAlt,
+  Send,
+  Share,
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import MoneyOverTimeGraph from "../tools/MoneyOverTimeGraph";
 import GenderDonutChart from "../tools/GenderGraph";
 import AgeDistributionChart from "../tools/AgeDistributionGraph";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Home = () => {
   console.log('access',JSON.parse(localStorage.getItem('access')))
@@ -69,7 +73,16 @@ getRemittances()
       <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">
         <div>Dashboard</div>
 
+        
+        <div className="flex items-center">
+          <div
+          onClick={()=> {
+             navigator.clipboard.writeText('https://churchdb-three.vercel.app/membership-form/'+region?._id);
+             toast('link copied to clipboard')
+          }}
+          className="text-[13px] mr-2 hover:underline hover:text-blue-500 cursor-pointer"> Share membership form for region <Send sx={{fontSize:"", position:'relative', bottom: 1}}/></div>
         <div className=" text-green-700">$ {remittances.reduce((sum, remit) => sum + remit.amount, 0)}</div>
+        </div>
       </div>
 
       {/* <div className="pt-7 px-4">

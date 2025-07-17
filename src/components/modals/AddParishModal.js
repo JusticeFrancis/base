@@ -207,9 +207,9 @@ const AddParish = ({
               </div>
             </div>
 
-            {/* <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
                 <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
-                 Phone Number
+                Password
                 </div>
 
                 <div className="lg:w-[300px] w-full">
@@ -221,14 +221,14 @@ const AddParish = ({
                       fontSize: "14px",
                     }}
 
-                    value={parish.phone_number}
+                    value={parish.password}
                   onChange={(e) => {
-                    setParish({ ...parish, phone_number: e.target.value });
+                    setParish({ ...parish, password: e.target.value });
                   }}
                   />
                 </div>
 
-              </div> */}
+              </div>
 
             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">

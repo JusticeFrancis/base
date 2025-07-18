@@ -153,7 +153,7 @@ const BulkEmail = () => {
                                       />
                                       <div className="text-[13px]">
                                       {
-                                        template.img ? 'My email has a Image': 'My email has no Image'
+                                        template.img ? 'My email has an Image': 'My email has no Image'
                                       }
                                         
                                       </div>

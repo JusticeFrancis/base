@@ -197,7 +197,9 @@ const Dashboard = () => {
                     </div>
                   )}
 
-                  {location.pathname.startsWith("/dashboard/provinces") ? (
+                {region?.hasdenominations && (
+                  <>
+                    {  location.pathname.startsWith("/dashboard/provinces") ? (
                     <div
                       onClick={() => {
                         navigate("/dashboard/provinces");
@@ -265,6 +267,8 @@ const Dashboard = () => {
                     </div>
                   )}
 
+</>
+                )}
                   {location.pathname.startsWith("/dashboard/members") ? (
                     <div
                       onClick={() => {

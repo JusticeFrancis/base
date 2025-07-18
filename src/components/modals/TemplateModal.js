@@ -20,21 +20,39 @@ const TemplateModal = ({ open, setOpen, loader, setLoader, bulkEmail, setBulkEma
   const [template, setTemplate] = useState(1)
 
   const sendEmail = async () => {
-    console.log(bulkEmail.id)
+    let img 
     setLoader(true)
+    if(bulkEmail.img){
+      const formData = new FormData();
+    formData.append("image", bulkEmail.img);
+     img = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "upload",
+      formData
+    );
+
+    console.log(img.data);
+    }
+
+
+
+    console.log(img.data.imageUrl)
+  
     let email = await axios.post(
      
       process.env.REACT_APP_BACKEND_URL + "email/send-email-in-bulk",
       {
-        ...bulkEmail, template
+        ...bulkEmail, template, img_link: bulkEmail.img ? img.data.imageUrl : null
       }
 
    
     ).then((res)=> {
       setLoader(false)
       toast('Successful')
+      console.log(res.data)
       setOpen(false)
      setBulkEmail({
+        link: null,
+        img: null,
           id : JSON.parse(localStorage.getItem('region'))._id,
           title:'',
           body:'',
@@ -70,7 +88,7 @@ const TemplateModal = ({ open, setOpen, loader, setLoader, bulkEmail, setBulkEma
 
         <div className="lg:text-[16px]  text-[15px] font-semibold mb-4">
           {" "}
-          Choose Template
+          Choose Template Color
         </div>
         <div className="lg:flex justify-center">
           <div className="lg:space-y-5 space-y-3">

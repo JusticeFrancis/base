@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 const Home = () => {
   console.log('access',JSON.parse(localStorage.getItem('access')))
   const [region, setRegion] = useState(JSON.parse(localStorage.getItem('region')))
+  console.log('region', region)
   const [provinces , setProvinces] = useState([])
   const [parishes, setParishes] = useState([])
   const [members, setMembers] = useState([])
@@ -65,6 +66,8 @@ getProvinces()
 getParishes()
 getMembers()
 getRemittances()
+
+
   },[])
 
 
@@ -91,7 +94,9 @@ getRemittances()
       </div> */}
 
       <div className="lg:flex space-y-3 lg:space-y-0 items-center justify-between lg:space-x-10 mb-4">
-        <div className="bg-white flex space-x-3 w-full rounded-md shadow-xs  px-12 py-4">
+       
+        {region?.hasdenominations && (
+          <div className="bg-white flex space-x-3 w-full rounded-md shadow-xs  px-12 py-4">
           <div className="my-auto bg-[#cedefe] p-1 rounded-full">
             <HomeFilled
               sx={{
@@ -107,23 +112,29 @@ getRemittances()
             <div className="text-[15px] text-gray-600">Provinces</div>
           </div>
         </div>
+        )}
 
-        <div className="bg-white flex space-x-3 w-full rounded-lg  shadow-xs  px-12 py-4">
-          <div className="my-auto bg-[#fffaed] p-1 rounded-full">
-            <ChurchRounded
-              sx={{
-                color: "#FFC327",
-                position: "relative",
-                bottom: 2,
-                fontSize: "50px",
-              }}
-            />
-          </div>
-          <div className="my-auto">
-            <div className="text-[18px] font-bold">{parishes.length}</div>
-            <div className="text-[15px] text-gray-600">Parishes</div>
-          </div>
-        </div>
+
+
+
+       {region?.hasdenominations && (
+         <div className="bg-white flex space-x-3 w-full rounded-lg  shadow-xs  px-12 py-4">
+         <div className="my-auto bg-[#fffaed] p-1 rounded-full">
+           <ChurchRounded
+             sx={{
+               color: "#FFC327",
+               position: "relative",
+               bottom: 2,
+               fontSize: "50px",
+             }}
+           />
+         </div>
+         <div className="my-auto">
+           <div className="text-[18px] font-bold">{parishes.length}</div>
+           <div className="text-[15px] text-gray-600">Parishes</div>
+         </div>
+       </div>
+       )}
 
         <div className="bg-white flex space-x-3 w-full rounded-lg  shadow-xs  px-12 py-4">
           <div className="my-auto bg-[#e6e6f9] p-1 rounded-full">

@@ -208,7 +208,9 @@ getMembers()
         </div>
         <div className="flex justify-center">
           <div className="lg:space-y-5 space-y-3">
-            <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
+           {region?.hasdenominations && (
+            <>
+             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
                 Province
               </div>
@@ -272,6 +274,8 @@ getMembers()
                 </Select>
               </div>
             </div>
+            </>
+           )}
 
             <div className="grid lg:grid-cols-3 items-center lg:space-x-10 lg:space-y-0 space-y-2">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">

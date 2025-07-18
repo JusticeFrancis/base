@@ -6,6 +6,7 @@ import {
   InputBase,
   MenuItem,
   Select,
+  Switch,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
@@ -14,15 +15,20 @@ import { toast } from "react-toastify";
 
 const Settings = () => {
   const [loader, setLoader] = useState(false);
+  const [access, setAccess] = useState(
+    JSON.parse(localStorage.getItem("access"))
+  );
   const [appPassword, setAppPassword] = useState('123456')
+  const [email, setEmail] = useState(access?.sender_email || access?.email)
+  const [service, setService] = useState(access?.service || 'gmail')
+  const [port, setPort] = useState(access?.port || 465)
+  const [host, setHost] = useState(access?.host || 'smtp.mydomain.com')
   const [region, setRegion] = useState(
     JSON.parse(localStorage.getItem("region"))
   );
   const [province, setProvince] = useState();
   const [parish, setParish] = useState();
-  const [access, setAccess] = useState(
-    JSON.parse(localStorage.getItem("access"))
-  );
+ 
   const [tab, setTab] = useState(1);
 
   const getProvince = async () => {
@@ -51,11 +57,38 @@ const Settings = () => {
       let response = await axios.post(
         process.env.REACT_APP_BACKEND_URL + "access/update",
         { access_id: access._id ,
-          appPassword 
+          appPassword ,
+          email,
+          host, service, port
+        }
+      ).then((res)=> {
+        setLoader(false)
+        localStorage.setItem('access', JSON.stringify(res.data.updatedAccess))
+        toast('success')
+        console.log(res.data)
+      })
+      .catch((err)=> {
+        setLoader(false)
+        toast(err.response.data.err)
+      })
+      console.log(response)
+  };
+
+  const updateDenominations = async (hasdenominations) => {
+    setLoader(true)
+      let response = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "denominations",
+        { region_id: region._id ,
+          hasdenominations 
         }
       ).then((res)=> {
         setLoader(false)
         toast('success')
+        localStorage.setItem('region', JSON.stringify(res.data.updatedRegion))
+        setTimeout(() => {
+          window.location.reload()
+
+        }, 2000);
       })
       .catch((err)=> {
         setLoader(false)
@@ -128,6 +161,35 @@ const Settings = () => {
               {" "}
               Account Information
             </div>
+
+
+            <div className="flex items-center space-x-3  mt-2">
+             
+                        <div className="flex items-center">
+                          <Switch
+                            defaultChecked={region?.hasdenominations || false}
+                            defaultValue={region?.hasdenominations || false}
+                            value={region?.hasdenominations || false}
+                            onChange={(e) => {
+                              setRegion({ ...region, hasdenominations: !region.hasdenominations });
+                              updateDenominations(!region.hasdenominations)
+                            }}
+                            size="lg"
+                            sx={{
+                              color: "purple",
+                              "&.Mui-checked": {
+                                color: "purple", // Set color for checked state
+                              },
+                            }}
+                          />
+                          <div className="text-[13px]">
+                          {
+                            region.hasdenominations ? ' My organization has denominations like parishes and provinces ': 'My organization has no demoninations'
+                          }
+                            
+                          </div>
+                        </div>
+                      </div>
 
             <div className=" mb-5">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
@@ -306,6 +368,38 @@ const Settings = () => {
               Setup SMTP for bulk email
             </div>
 
+
+             <div className="w-full ">
+                          <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                            Select your email service  
+                          </div>
+            
+                          <div className="lg:w-full w-full">
+                            <Select
+                              disabled={access.province_id ? true : false}
+                              IconComponent={KeyboardArrowDown}
+                              fullWidth
+                              defaultValue={'one'}
+                              value={service}
+                            onChange={(e) => {
+                              setService(e.target.value);
+                            }}
+                              className="mb-2 bg-[#F7F7F8]"
+                              sx={{
+                                fontSize: "14px",
+                                padding: "4px 8px", // Adjust padding here
+                                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                                "& .MuiSelect-select": {
+                                  padding: "4px 8px", // Adjust padding for the text inside Select
+                                },
+                              }}
+                            >
+                                             <MenuItem value={'gmail'}>{'GMAIL'}</MenuItem>
+                                             <MenuItem value={'domain_email'}>{'MY DOMAIN EMAIL'}</MenuItem>
+                            </Select>
+                          </div>
+                        </div>
+
           
             <div className=" mb-5">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
@@ -314,8 +408,10 @@ const Settings = () => {
 
               <div className=" w-full flex items-center space-x-4">
                 <InputBase
-                  value={access?.email}
-                  readOnly
+                  value={email}
+                  onChange={(e)=> {
+                    setEmail(e.target.value)
+                  }}
                   sx={{
                     bgcolor: "#F7F7F8",
                     width: "100%",
@@ -326,7 +422,59 @@ const Settings = () => {
               </div>
             </div>
 
-            <div className="text-[13px] text-gray-600 my-2"> To create app password  <span className="hover:underline text-blue-500 font-bold cursor-pointer" onClick={()=> {
+
+            {service == 'domain_email' && (
+              <div className=" mb-5">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Host
+              </div>
+
+              <div className=" w-full flex items-center space-x-4">
+                <InputBase
+                  value={host}
+                  onChange={(e)=> {
+                    setHost(e.target.value)
+                  }}
+                  sx={{
+                    bgcolor: "#F7F7F8",
+                    width: "100%",
+                    px: 2,
+                    fontSize: "14px",
+                  }}
+                />
+              </div>
+            </div>
+            )}
+
+
+{service == 'domain_email' && (
+              <div className=" mb-5">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Port
+              </div>
+
+              <div className=" w-full flex items-center space-x-4">
+                <InputBase
+                  value={port}
+                  onChange={(e)=> {
+                    setPort(e.target.value)
+                  }}
+                  sx={{
+                    bgcolor: "#F7F7F8",
+                    width: "100%",
+                    px: 2,
+                    fontSize: "14px",
+                  }}
+                />
+              </div>
+            </div>
+            )}
+
+
+
+            {service == 'gmail' && (
+              <>
+              <div className="text-[13px] text-gray-600 my-2"> To create app password  <span className="hover:underline text-blue-500 font-bold cursor-pointer" onClick={()=> {
               window.open('https://myaccount.google.com/apppasswords', '_blank')
             }}>click here</span> </div>
 
@@ -351,6 +499,36 @@ const Settings = () => {
                 />
               </div>
             </div>
+            </>
+            )}
+
+            {/* <div className="text-[13px] text-gray-600 my-2"> To create app password  <span className="hover:underline text-blue-500 font-bold cursor-pointer" onClick={()=> {
+              window.open('https://myaccount.google.com/apppasswords', '_blank')
+            }}>click here</span> </div> */}
+
+          {service == 'domain_email' && (
+              <div className=" mb-5">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+               Password
+              </div>
+
+              <div className=" w-full flex items-center space-x-4">
+                <InputBase
+                type="password"
+                  value={appPassword}
+                  onChange={(e)=> {
+                    setAppPassword(e.target.value)
+                  }}
+                  sx={{
+                    bgcolor: "#F7F7F8",
+                    width: "100%",
+                    px: 2,
+                    fontSize: "14px",
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
             <div>
               <Button

@@ -1,5 +1,5 @@
 import { ErrorOutline } from "@mui/icons-material";
-import { Button, Checkbox, CircularProgress, InputBase } from "@mui/material";
+import { Button, Checkbox, CircularProgress, InputBase, Switch } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ const CreateRegion = () => {
   const [loader, setLoader] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [region, setRegion] = useState({
-    logo : null,
+    logo: null,
     name: "",
     location: "",
     email: "",
@@ -19,57 +19,55 @@ const CreateRegion = () => {
     twilioApiKey: "",
     password: "",
     agreed: false,
+    hasdenominations: false
   });
 
-  useEffect(()=> {
-      if(localStorage.getItem('access')){
-        navigate('/dashboard')
-      }
-    },[])
+  useEffect(() => {
+    if (localStorage.getItem("access")) {
+      navigate("/dashboard");
+    }
+  }, []);
 
-  const createRegion = async()=> {
-
-    if(region.agreed){
+  const createRegion = async () => {
+    if (region.agreed) {
       try {
-
-        setLoader(true)
+        setLoader(true);
 
         const formData = new FormData();
-    formData.append('image', region.logo);
-        let img = await  axios.post(process.env.REACT_APP_BACKEND_URL+'upload',formData)
+        formData.append("image", region.logo);
+        let img = await axios.post(
+          process.env.REACT_APP_BACKEND_URL + "upload",
+          formData
+        );
 
+        console.log(img.data);
 
-        console.log(img.data)
-
-        let response = await axios.post(process.env.REACT_APP_BACKEND_URL+'region/create',{
-          ...region,
-          logo:img.data.imageUrl
-        }).then((res)=> {
-          toast('success')
-          setLoader(false)
-          console.log(res)
-          localStorage.setItem('region', JSON.stringify(res.data.region))
-          localStorage.setItem('access', JSON.stringify(res.data.access))
-          navigate('/dashboard')
-        })
-      .catch((err)=> {
-            toast(err?.response?.data?.error)
-            setLoader(false)
-            console.log(err)
+        let response = await axios
+          .post(process.env.REACT_APP_BACKEND_URL + "region/create", {
+            ...region,
+            logo: img.data.imageUrl,
           })
-        
-   
-     
-        
+          .then((res) => {
+            toast("success");
+            setLoader(false);
+            console.log(res);
+            localStorage.setItem("region", JSON.stringify(res.data.region));
+            localStorage.setItem("access", JSON.stringify(res.data.access));
+            navigate("/dashboard");
+          })
+          .catch((err) => {
+            toast(err?.response?.data?.error);
+            setLoader(false);
+            console.log(err);
+          });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }else{
-      console.log('please agree')
+    } else {
+      console.log("please agree");
     }
-  }
+  };
 
-  
   return (
     <div>
       <div className="grid lg:grid-cols-4">
@@ -78,7 +76,7 @@ const CreateRegion = () => {
             <img src="/icons/login_img.png" className="w-[50px]" />
           </div>
           <div className="text-center lg:text-[16px] mt-4  font-semibold ">
-            Create Region
+            Sign Up
           </div>
 
           {errorMsg && (
@@ -87,51 +85,14 @@ const CreateRegion = () => {
             </div>
           )}
 
-<div className="mt-[70px] mb-3 flex items-center space-x-4 " >
-  <input hidden type="file" accept="image/*" id='logo'
-  
-  onChange={(e)=> {
-
-    let file = e.target.files[0]
-    setRegion({...region, logo: file })
-
-  }}/>
-
- 
-<Button
-onClick={()=> {
-  let logo = document.getElementById('logo')
-  logo.click()
-}}
-              sx={{
-                textTransform: "none",
-                bgcolor: "#605BFF",
-                color: "white",
-                py: "2px",
-                px: "20px",
-                borderRadius: "7px",
-                fontSize: { lg: "14px", xs: "13px" },
-                width: "fit",
-              }}
-              disabled={loader}
-            >
-              {loader ? (
-                <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
-              ) : (
-                "Upload logo"
-              )}
-            </Button>
-            <img src={region.logo &&  URL.createObjectURL(region.logo)}  className="w-[50px] border-[1px] rounded-full" />
-          </div>
-
           <div className="space-y-2 mb-3 ">
-            <div className=" lg:text-[14px] text-[13px] ">Region Name</div>
+            <div className=" lg:text-[14px] text-[13px] "> Name</div>
             <InputBase
               value={region.name}
               onChange={(e) => {
                 setRegion({ ...region, name: e.target.value });
               }}
-              placeholder="johnmichael@example.com"
+              placeholder="your organization name"
               sx={{
                 bgcolor: "#F7F7F8",
                 width: "100%",
@@ -142,15 +103,14 @@ onClick={()=> {
             />
           </div>
 
-
           <div className="space-y-2 mb-3 ">
-            <div className=" lg:text-[14px] text-[13px] ">Region Location</div>
+            <div className=" lg:text-[14px] text-[13px] "> Location</div>
             <InputBase
               value={region.location}
               onChange={(e) => {
                 setRegion({ ...region, location: e.target.value });
               }}
-              placeholder="johnmichael@example.com"
+              placeholder="your location"
               sx={{
                 bgcolor: "#F7F7F8",
                 width: "100%",
@@ -168,7 +128,7 @@ onClick={()=> {
               onChange={(e) => {
                 setRegion({ ...region, email: e.target.value });
               }}
-              placeholder="johnmichael@example.com"
+              placeholder="your email"
               sx={{
                 bgcolor: "#F7F7F8",
                 width: "100%",
@@ -204,6 +164,73 @@ onClick={()=> {
                 py: "2px",
                 fontSize: "14px",
               }}
+            />
+          </div>
+
+          <div className="flex items-center space-x-3  mt-2">
+            <div className="flex items-center">
+              <Switch
+                defaultChecked={false}
+                defaultValue={false}
+                value={region.hasdenominations || false}
+                onChange={(e) => {
+                  setRegion({ ...region, hasdenomination: !region.hasdenominations });
+                }}
+                size="lg"
+                sx={{
+                  color: "purple",
+                  "&.Mui-checked": {
+                    color: "purple", // Set color for checked state
+                  },
+                }}
+              />
+              <div className="text-[13px]">
+              {
+                region.hasdenominations ? ' My organization has denominations like parishes and provinces ': 'My organization has no demoninations'
+              }
+                
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-[20px] mb-3 flex items-center space-x-4 ">
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              id="logo"
+              onChange={(e) => {
+                let file = e.target.files[0];
+                setRegion({ ...region, logo: file });
+              }}
+            />
+
+            <Button
+              onClick={() => {
+                let logo = document.getElementById("logo");
+                logo.click();
+              }}
+              sx={{
+                textTransform: "none",
+                bgcolor: "#605BFF",
+                color: "white",
+                py: "2px",
+                px: "20px",
+                borderRadius: "7px",
+                fontSize: { lg: "14px", xs: "13px" },
+                width: "fit",
+              }}
+              disabled={loader}
+            >
+              {loader ? (
+                <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
+              ) : (
+                "Upload logo"
+              )}
+            </Button>
+            <img
+              src={region.logo && URL.createObjectURL(region.logo)}
+              className="w-[50px] border-[1px] rounded-full"
             />
           </div>
 
@@ -283,10 +310,12 @@ onClick={()=> {
           </div>
         </div>
         <div className="col-span-3 lg:flex justify-center my-auto hidden ">
-        <img src="/icons/illustration.png" className=" w-[580px] h-[500px] " />
+          <img
+            src="/icons/illustration.png"
+            className=" w-[580px] h-[500px] "
+          />
+        </div>
       </div>
-      </div>
-     
     </div>
   );
 };

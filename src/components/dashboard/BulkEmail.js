@@ -5,12 +5,19 @@ import {
   InputBase,
   MenuItem,
   Select,
+  Switch,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
 import axios from "axios";
+import EmailTemplates from "./EmailTemplates";
 
 const BulkEmail = () => {
+
+  const [template, setTemplate] = useState({
+    img: false,
+    link: false
+  })
   const [loader, setLoader] = useState(false);
     const [provinces, setProvinces] = useState([]);
     const [parishes, setParishes] = useState([]);
@@ -32,7 +39,9 @@ const BulkEmail = () => {
     access_id: JSON.parse(localStorage.getItem('access'))._id,
     covers: 'region',
     province_id: access.province_id,
-    parish_id: access.parish_id
+    parish_id: access.parish_id,
+    link: null,
+    img: null,
   })
   const [openTemplateModal, setOpenTemplateModal] = useState(false);
 
@@ -111,6 +120,9 @@ const BulkEmail = () => {
         <div>Bulk Email</div>
       </div>
 
+
+
+
       <div className="lg:grid-cols-6 lg:grid gap-4">
         <div className=" col-span-4  lg:mx-[50px] bg-white px-10  mb-4 lg:mb-0 pb-5 pt-2">
           <div className="text-[16px] text-center font-semibold mb-10">
@@ -118,8 +130,74 @@ const BulkEmail = () => {
             Send Bulk Email{" "}
           </div>
 
+          <div className="w-full ">
+              <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+                Select Email template  
+              </div>
+
+             <div className="flex items-center">
+                                      <Switch
+                                        defaultChecked={template?.img || false}
+                                        defaultValue={template?.img || false}
+                                        value={template?.img || false}
+                                        onChange={(e) => {
+                                          setTemplate({ ...template, img: !template.img });
+                                        }}
+                                        size="lg"
+                                        sx={{
+                                          color: "purple",
+                                          "&.Mui-checked": {
+                                            color: "purple", // Set color for checked state
+                                          },
+                                        }}
+                                      />
+                                      <div className="text-[13px]">
+                                      {
+                                        template.img ? 'My email has a flier': 'My email has no flier'
+                                      }
+                                        
+                                      </div>
+                                    </div>
+
+
+                                    <div className="flex items-center">
+                                      <Switch
+                                        defaultChecked={template?.link || false}
+                                        defaultValue={template?.link || false}
+                                        value={template?.link || false}
+                                        onChange={(e) => {
+                                          setTemplate({ ...template, link: !template.link });
+                                        }}
+                                        size="lg"
+                                        sx={{
+                                          color: "purple",
+                                          "&.Mui-checked": {
+                                            color: "purple", // Set color for checked state
+                                          },
+                                        }}
+                                      />
+                                      <div className="text-[13px]">
+                                      {
+                                        template.link ? 'My email has a link': 'My email has no link'
+                                      }
+                                        
+                                      </div>
+                                    </div>
+            </div>
+
+
           <div className="lg:flex items-center  lg:space-x-4 space-y-4 lg:space-y-0 mb-5">
-            <div className="w-full ">
+
+
+
+
+  
+
+
+
+            {region?.hasdenominations && (
+              <>
+              <div className="w-full ">
               <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
                 Province  
               </div>
@@ -195,6 +273,8 @@ const BulkEmail = () => {
                 </Select>
               </div>
             </div>
+            </>
+            )}
           </div>
 
           <div className=" mb-5">
@@ -218,6 +298,73 @@ const BulkEmail = () => {
             </div>
           </div>
 
+{template.link && (
+   <div className=" mb-5">
+   <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
+     Link
+   </div>
+
+   <div className=" w-full flex items-center space-x-4">
+     <InputBase
+      value ={bulkEmail.link}
+      onChange={(e)=> {
+       setBulkEmail({...bulkEmail, link: e.target.value})
+      }}
+       sx={{
+         bgcolor: "#F7F7F8",
+         width: "100%",
+         px: 2,
+         fontSize: "14px",
+       }}
+     />
+   </div>
+ </div>
+
+)}
+
+
+{template.img && (
+   <div className="mt-[20px] mb-3 flex items-center space-x-4 ">
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                id="logo"
+                onChange={(e) => {
+                  let file = e.target.files[0];
+                  setBulkEmail({ ...bulkEmail, img: file });
+                }}
+              />
+  
+              <Button
+                onClick={() => {
+                  let logo = document.getElementById("logo");
+                  logo.click();
+                }}
+                sx={{
+                  textTransform: "none",
+                  bgcolor: "#605BFF",
+                  color: "white",
+                  py: "2px",
+                  px: "20px",
+                  borderRadius: "7px",
+                  fontSize: { lg: "14px", xs: "13px" },
+                  width: "fit",
+                }}
+                disabled={loader}
+              >
+                {loader ? (
+                  <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
+                ) : (
+                  "Upload flier"
+                )}
+              </Button>
+              <img
+                src={bulkEmail.img && URL.createObjectURL(bulkEmail.img)}
+                className="w-[50px] border-[1px] rounded-full"
+              />
+            </div>
+)}
           <div className=" mb-5">
             <div className="lg:text-[14px] text-[13px] font-semibold flex items-center">
               Content
@@ -267,10 +414,7 @@ const BulkEmail = () => {
         </div>
 
         <div className=" col-span-2 h-fit mx-[10px]    pb-2  pt-2">
-          <div className="text-[16px] text-center font-semibold mb-2">
-            {" "}
-            Emails sent
-          </div>
+         
 
           <div className="space-y-3">
             {/* <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
@@ -298,6 +442,15 @@ const BulkEmail = () => {
                 <div className="underline text-[13px] ">to 5 members</div>{" "}
               </div>
             </div> */}
+
+
+            <EmailTemplates template={template} email={bulkEmail}  />
+
+
+            {/* <div className="text-[16px] text-center font-semibold mb-2">
+            {" "}
+            Emails sent
+          </div>
 
          {emails?.map((item,index)=> (
              <div className="flex items-center space-x-4 px-4 bg-white py-2  shadow-md">
@@ -332,12 +485,16 @@ const BulkEmail = () => {
                <div className="underline text-[13px] ">to {item?.numberOfRecipients} members</div>{" "}
              </div>
            </div>
-         ))}
+         ))} */}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+
+
+
 
 export default BulkEmail;

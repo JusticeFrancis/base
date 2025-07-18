@@ -30,7 +30,7 @@ import {
   const Sidebar = ({ open, setOpen, orgs }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    const [region, setRegion] = useState(JSON.parse(localStorage.getItem("region")));
   
     const [err_msg, setErrorMsg] = useState(null);
     const [loader, setLoader] = useState(false);
@@ -78,7 +78,9 @@ import {
             </div>
           )}
   
-          {location.pathname.startsWith('/dashboard/Provinces') 
+         {region?.hasdenominations && (
+          <>
+           {location.pathname.startsWith('/dashboard/Provinces') 
             ? (
               <div
                 onClick={() => {
@@ -147,6 +149,8 @@ import {
              Parishes
             </div>
           )}
+          </>
+         )}
   
           {location.pathname.startsWith('/dashboard/members') ? (
             <div

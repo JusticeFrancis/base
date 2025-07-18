@@ -153,7 +153,7 @@ const BulkEmail = () => {
                                       />
                                       <div className="text-[13px]">
                                       {
-                                        template.img ? 'My email has a flier': 'My email has no flier'
+                                        template.img ? 'My email has a Image': 'My email has no Image'
                                       }
                                         
                                       </div>
@@ -356,7 +356,7 @@ const BulkEmail = () => {
                 {loader ? (
                   <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
                 ) : (
-                  "Upload flier"
+                  "Upload Image"
                 )}
               </Button>
               <img

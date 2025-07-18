@@ -84,7 +84,7 @@ getRemittances()
              toast('link copied to clipboard')
           }}
           className="text-[13px] mr-2 hover:underline hover:text-blue-500 cursor-pointer"> Share membership form for region <Send sx={{fontSize:"", position:'relative', bottom: 1}}/></div>
-        <div className=" text-green-700">$ {remittances.reduce((sum, remit) => sum + remit.amount, 0)}</div>
+        <div className=" text-green-700">({region?.currency == 'dollar' && '$'})  {remittances.reduce((sum, remit) => sum + remit.amount, 0)}</div>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
-import { ErrorOutline } from "@mui/icons-material";
-import { Button, Checkbox, CircularProgress, InputBase, Switch } from "@mui/material";
+import { ErrorOutline, KeyboardArrowDown } from "@mui/icons-material";
+import { Button, Checkbox, CircularProgress, InputBase, MenuItem, Select, Switch } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,8 @@ const CreateRegion = () => {
     twilioApiKey: "",
     password: "",
     agreed: false,
-    hasdenominations: false
+    hasdenominations: false,
+    currency:'dollar'
   });
 
   useEffect(() => {
@@ -174,7 +175,7 @@ const CreateRegion = () => {
                 defaultValue={false}
                 value={region.hasdenominations || false}
                 onChange={(e) => {
-                  setRegion({ ...region, hasdenomination: !region.hasdenominations });
+                  setRegion({ ...region, hasdenominations: !region.hasdenominations });
                 }}
                 size="lg"
                 sx={{
@@ -192,6 +193,39 @@ const CreateRegion = () => {
               </div>
             </div>
           </div>
+
+
+          <div className="w-full ">
+          <div className=" lg:text-[14px] text-[13px] ">
+                Select Currency  
+              </div>
+
+              <div className="lg:w-full w-full">
+                <Select
+                  IconComponent={KeyboardArrowDown}
+                  fullWidth
+                  defaultValue={'one'}
+                  value={region.currency}
+                onChange={(e) => {
+                  setRegion((prev) => ({
+                    ...prev,
+                    currency: e.target.value,
+                  }));
+                }}
+                  className="mb-2 bg-[#F7F7F8]"
+                  sx={{
+                    fontSize: "14px",
+                    padding: "4px 8px", // Adjust padding here
+                    "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                    "& .MuiSelect-select": {
+                      padding: "4px 8px", // Adjust padding for the text inside Select
+                    },
+                  }}
+                >
+                                 <MenuItem value={'dollar'}>{'Dollar'}</MenuItem>
+                </Select>
+              </div>
+            </div>
 
           <div className="mt-[20px] mb-3 flex items-center space-x-4 ">
             <input

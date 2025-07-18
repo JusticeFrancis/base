@@ -18,6 +18,7 @@ const Main = () => {
               <Route path="/register" element={<CreateRegion/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/dashboard/*" element={<Dashboard/>} />
+              <Route path="/" element={<Dashboard/>} />
             </Routes>
           </BrowserRouter>
    </>

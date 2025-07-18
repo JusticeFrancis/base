@@ -112,7 +112,7 @@ const Remittance = () => {
 
                 <div className="col-span-3 text-gray-500 ">Province Name</div>
 
-                <div className="col-span-1 text-gray-500 ">Amount ($)</div>
+                <div className="col-span-1 text-gray-500 ">Amount ({region?.currency == 'dollar' && '$'})</div>
 
                 <div className="col-span-2 text-gray-500 text-center">Reason</div>
               </div>

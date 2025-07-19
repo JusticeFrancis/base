@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
 import axios from "axios";
 import EmailTemplates from "./EmailTemplates";
+import SubscribeModal from "../modals/SubscribeModal";
 
 const BulkEmail = () => {
 
@@ -105,9 +106,28 @@ const BulkEmail = () => {
         getParishesForProvince();
       }
     }, [bulkEmail.province_id]);
+
+    const [stripeCustomer, setStripeCustomer] = useState();
+    const getStripeCustomer = async () => {
+      console.log("hi");
+      let stripe_customer = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "stripe/get",
+        {
+          stripe_id: region?.stripe_id,
+        }
+      );
+      console.log("stripe_customer", stripe_customer.data);
+      setStripeCustomer(stripe_customer.data.subscription);
+    };
+    useEffect(() => {
+      getStripeCustomer();
+    }, []);
+
+
   return (
     <div className="pt-7 px-4 ">
-      <TemplateModal
+       {stripeCustomer && stripeCustomer.status == "active" ? (
+        <TemplateModal
         open={openTemplateModal}
         setOpen={setOpenTemplateModal}
         loader={loader}
@@ -116,6 +136,10 @@ const BulkEmail = () => {
         setBulkEmail={setBulkEmail}
         getEmails= {getEmails}
       />
+      ) : (
+        <SubscribeModal open={openTemplateModal} setOpen={setOpenTemplateModal} />
+      )}
+     
       <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">
         <div>Bulk Email</div>
       </div>

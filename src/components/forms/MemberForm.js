@@ -156,6 +156,27 @@ const MemberForm = () => {
     }
   }, [region]);
 
+
+  const [stripeCustomer, setStripeCustomer] = useState();
+  const getStripeCustomer = async () => {
+    let stripe_customer = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "stripe/get",
+      {
+        stripe_id: region?.stripe_id,
+      }
+    );
+    console.log("stripe_customer", stripe_customer.data);
+    
+    setStripeCustomer(stripe_customer.data.subscription);
+  };
+  useEffect(() => {
+    if(region){
+      getStripeCustomer();
+    }
+  }, [region]);
+
+
+
   return (
     <div className="flex items-center justify-center py-5">
       <div className="lg:w-[700px] py-5 px-4    w-full bg-white shadow-md rounded-lg  ">
@@ -165,8 +186,14 @@ const MemberForm = () => {
 
         {form_submitted && (
           <p className="text-green-500 text-center text-[14px] ">
-            Form submitted successfully , please reload to add another number
+            Form submitted successfully , please reload to add another member
           </p>
+        )}
+
+        {!stripeCustomer && (
+             <p className="text-red-500 text-center text-[14px] ">
+         Pls inform form owner subscribe on dashboard to add more members 
+           </p>
         )}
         <div className="text-[20px] font-normal  text-center mx-auto justify-center flex items-center space-x-2  ">
           {!region && (
@@ -639,49 +666,48 @@ const MemberForm = () => {
                      </div>
                    )} */}
 
-            {!form_submitted && (
-              <div
-                className="flex justify-center pt-6 pb-4 space-x-2"
-                id="btnfor"
-              >
-                <Button
-                  sx={{
-                    textTransform: "none",
-                    color: "#605BFF",
-                    bgcolor: "white",
-                    py: "4px",
-                    px: "40px",
-                    borderRadius: "7px",
-                    fontSize: { lg: "14px", xs: "13px" },
-                  }}
-                  onClick={() => {
-                    window.location.pathname = "/";
-                  }}
-                >
-                  Close
-                </Button>
+{!form_submitted && stripeCustomer && stripeCustomer.status === 'active' && (
+  <div className="flex justify-center pt-6 pb-4 space-x-2" id="btnfor">
+    <Button
+      sx={{
+        textTransform: "none",
+        color: "#605BFF",
+        bgcolor: "white",
+        py: "4px",
+        px: "40px",
+        borderRadius: "7px",
+        fontSize: { lg: "14px", xs: "13px" },
+      }}
+      onClick={() => {
+        window.location.pathname = "/";
+      }}
+    >
+      Close
+    </Button>
 
-                <Button
-                  sx={{
-                    textTransform: "none",
-                    bgcolor: "#605BFF",
-                    color: "white",
-                    py: "4px",
-                    px: "40px",
-                    borderRadius: "7px",
-                    fontSize: { lg: "14px", xs: "13px" },
-                  }}
-                  disabled={loader}
-                  onClick={createMember}
-                >
-                  {loader ? (
-                    <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
-                  ) : (
-                    " Save"
-                  )}
-                </Button>
-              </div>
-            )}
+    <Button
+      sx={{
+        textTransform: "none",
+        bgcolor: "#605BFF",
+        color: "white",
+        py: "4px",
+        px: "40px",
+        borderRadius: "7px",
+        fontSize: { lg: "14px", xs: "13px" },
+      }}
+      disabled={loader}
+      onClick={createMember}
+    >
+      {loader ? (
+        <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
+      ) : (
+        "Save"
+      )}
+    </Button>
+  </div>
+)}
+
+
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import AddParish from "../modals/AddParishModal";
 import ParishGraph from "../tools/ParishGraph";
 import AddDepartment from "../modals/AddDepartment";
 import axios from "axios";
+import SubscribeModal from "../modals/SubscribeModal";
 
 const Parishes = () => {
   const [region, setRegion] = useState(
@@ -52,18 +53,39 @@ const Parishes = () => {
   useEffect(() => {
     getParishes();
   }, []);
+
+  const [stripeCustomer, setStripeCustomer] = useState();
+  const getStripeCustomer = async () => {
+    console.log("hi");
+    let stripe_customer = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "stripe/get",
+      {
+        stripe_id: region?.stripe_id,
+      }
+    );
+    console.log("stripe_customer", stripe_customer.data);
+    setStripeCustomer(stripe_customer.data.subscription);
+  };
+  useEffect(() => {
+    getStripeCustomer();
+  }, []);
   return (
     <div className="grid grid-cols-9  lg:px-0 px-4 py-4">
-      <AddParish
-        open={open}
-        setOpen={setOpen}
-        loader={loader}
-        setLoader={setLoader}
-        setEdit={setEdit}
-        edit = {edit}
-        selectedParish={selectedParish}
-        getParishes={getParishes}
-      />
+       {stripeCustomer && stripeCustomer.status == "active" ? (
+         <AddParish
+         open={open}
+         setOpen={setOpen}
+         loader={loader}
+         setLoader={setLoader}
+         setEdit={setEdit}
+         edit = {edit}
+         selectedParish={selectedParish}
+         getParishes={getParishes}
+       />
+      ) : (
+        <SubscribeModal open={open} setOpen={setOpen} />
+      )}
+   
 
       <div className="lg:col-span-5 col-span-9 lg:order-1 order-2 mb-4 lg:mb-0 ">
         <div className="pt-7 px-4">

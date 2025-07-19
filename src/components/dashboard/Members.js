@@ -22,11 +22,30 @@ import AddParish from "../modals/AddParishModal";
 import ParishGraph from "../tools/ParishGraph";
 import AddMembers from "../modals/AddMemberModal";
 import axios from "axios";
+import SubscribeModal from "../modals/SubscribeModal";
 
 const Members = () => {
+  
   const [region, setRegion] = useState(
     JSON.parse(localStorage.getItem("region"))
   );
+
+
+  const [stripeCustomer, setStripeCustomer] = useState();
+  const getStripeCustomer = async () => {
+    console.log("hi");
+    let stripe_customer = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "stripe/get",
+      {
+        stripe_id: region?.stripe_id,
+      }
+    );
+    console.log('stripe_customer',stripe_customer.data);
+    setStripeCustomer(stripe_customer.data.subscription);
+  };
+  useEffect(()=> {
+    getStripeCustomer()
+  },[])
 
   const [access, setAccess] = useState(
     JSON.parse(localStorage.getItem("access"))
@@ -90,7 +109,8 @@ const Members = () => {
 
   return (
     <div className="grid grid-cols-9  lg:px-0 px-4 py-4">
-      <AddMembers
+      {(stripeCustomer && stripeCustomer.status == 'active') ? (
+        <AddMembers
         open={open}
         setOpen={setOpen}
         loader={loader}
@@ -100,6 +120,12 @@ const Members = () => {
         selectedMember={selectedMember}
         getMembers1={getMembers}
       />
+      ): (
+        <SubscribeModal
+        open={open}
+        setOpen={setOpen}
+      />
+      )}
       <div className="lg:col-span-6 col-span-9 lg:order-1 order-2 mb-4 lg:mb-0 ">
         <div className="pt-7 px-4">
           <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">

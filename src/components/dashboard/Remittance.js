@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import TemplateModal from "../modals/TemplateModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+import SubscribeModal from "../modals/SubscribeModal";
 
 const Remittance = () => {
   const [loader, setLoader] = useState(false);
@@ -50,27 +51,26 @@ const Remittance = () => {
   };
 
   const createRemittance = async () => {
-    setLoader(true)
-    let response = await axios.post(
-      process.env.REACT_APP_BACKEND_URL + "remittance/create",
-      remittance
-    ).then((res)=> {
-      setLoader(false)
-      toast('success')
-      getRemittances();
-      setRemittance({
-        region_id: JSON.parse(localStorage.getItem("region"))?._id,
-        province_id: "",
-        parish_id: "",
-        amount: 0,
-        type: "",
-        reason: "",
+    setLoader(true);
+    let response = await axios
+      .post(process.env.REACT_APP_BACKEND_URL + "remittance/create", remittance)
+      .then((res) => {
+        setLoader(false);
+        toast("success");
+        getRemittances();
+        setRemittance({
+          region_id: JSON.parse(localStorage.getItem("region"))?._id,
+          province_id: "",
+          parish_id: "",
+          amount: 0,
+          type: "",
+          reason: "",
+        });
       })
-    })
-    .catch((err)=> {
-      setLoader(false)
-      toast(err.response.data.err)
-    })
+      .catch((err) => {
+        setLoader(false);
+        toast(err.response.data.err);
+      });
     console.log(response);
   };
 
@@ -96,8 +96,25 @@ const Remittance = () => {
       getParishesForProvince();
     }
   }, [remittance.province_id]);
+  const [open, setOpen] = useState(false)
+  const [stripeCustomer, setStripeCustomer] = useState();
+    const getStripeCustomer = async () => {
+      console.log("hi");
+      let stripe_customer = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "stripe/get",
+        {
+          stripe_id: region?.stripe_id,
+        }
+      );
+      console.log("stripe_customer", stripe_customer.data);
+      setStripeCustomer(stripe_customer.data.subscription);
+    };
+    useEffect(() => {
+      getStripeCustomer();
+    }, []);
   return (
     <div className="pt-7 px-4 ">
+      <SubscribeModal open={open} setOpen={setOpen} />
       <div className=" flex justify-between lg:text-[17px] text-[15px] font-semibold mb-7">
         <div>Remittance</div>
       </div>
@@ -112,24 +129,28 @@ const Remittance = () => {
 
                 <div className="col-span-3 text-gray-500 ">Province Name</div>
 
-                <div className="col-span-1 text-gray-500 ">Amount ({region?.currency == 'dollar' && '$'})</div>
+                <div className="col-span-1 text-gray-500 ">
+                  Amount ({region?.currency == "dollar" && "$"})
+                </div>
 
-                <div className="col-span-2 text-gray-500 text-center">Reason</div>
+                <div className="col-span-2 text-gray-500 text-center">
+                  Reason
+                </div>
               </div>
 
               {remittances &&
                 remittances.map((item, index) => {
-
                   const getProvince = async () => {
                     let province = await axios.post(
                       process.env.REACT_APP_BACKEND_URL + "province/get",
                       {
                         province_id: item.province_id,
                       }
-                    )
-                    document.getElementById('province-name-'+index).innerHTML = province?.data?.province?.name || 'null'
+                    );
+                    document.getElementById(
+                      "province-name-" + index
+                    ).innerHTML = province?.data?.province?.name || "null";
                   };
-
 
                   const getParish = async () => {
                     let parish = await axios.post(
@@ -137,38 +158,55 @@ const Remittance = () => {
                       {
                         parish_id: item.parish_id,
                       }
-                    )
-                     document.getElementById('parish-name-'+index).innerHTML = parish?.data.parish?.name || 'null'
+                    );
+                    document.getElementById("parish-name-" + index).innerHTML =
+                      parish?.data.parish?.name || "null";
                   };
 
-
-                  getProvince()
-                  getParish()
+                  getProvince();
+                  getParish();
 
                   return (
                     <div
-                      className={ "grid grid-cols-11 gap-4 text-[15px] mt-4 bg-white  shadow-sm hover:shadow-lg cursor-pointer rounded-lg py-4  px-2 border-[1px] border-gray-400 "
-                        }
+                      className={
+                        "grid grid-cols-11 gap-4 text-[15px] mt-4 bg-white  shadow-sm hover:shadow-lg cursor-pointer rounded-lg py-4  px-2 border-[1px] border-gray-400 "
+                      }
                     >
-                      <div className="col-span-2 text-black">{(new Date(item.createdAt)).toLocaleString([], {
-                         year: 'numeric',
-                         month: '2-digit',
-                         day:'2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: true, // set to false if you want 24-hour format
-})}</div>
+                      <div className="col-span-2 text-black">
+                        {new Date(item.createdAt).toLocaleString([], {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true, // set to false if you want 24-hour format
+                        })}
+                      </div>
 
-                      <div className="col-span-3 text-black" id={'province-name-'+index}>...</div>
-                      <div className="col-span-3 text-black" id={'parish-name-'+index}>...</div>
+                      <div
+                        className="col-span-3 text-black"
+                        id={"province-name-" + index}
+                      >
+                        ...
+                      </div>
+                      <div
+                        className="col-span-3 text-black"
+                        id={"parish-name-" + index}
+                      >
+                        ...
+                      </div>
 
                       <div className="col-span-1 text-black">
-                          <div className={item?.type == 'credit'? "bg-green-300 text-green-900 text-center w-fit px-2  rounded-lg text-[14px]": 
-                            "bg-red-300 text-red-900 text-center w-fit px-2  rounded-lg text-[14px]"
-                          }>
-                            {" "}
+                        <div
+                          className={
+                            item?.type == "credit"
+                              ? "bg-green-300 text-green-900 text-center w-fit px-2  rounded-lg text-[14px]"
+                              : "bg-red-300 text-red-900 text-center w-fit px-2  rounded-lg text-[14px]"
+                          }
+                        >
+                          {" "}
                           {item?.amount}
-                          </div>
+                        </div>
                       </div>
 
                       <div
@@ -182,8 +220,6 @@ const Remittance = () => {
                     </div>
                   );
                 })}
-
-              
             </div>
           </div>
         </div>
@@ -365,7 +401,13 @@ const Remittance = () => {
                 fontSize: { lg: "14px", xs: "13px" },
               }}
               disabled={loader}
-              onClick={createRemittance}
+              onClick={() => {
+                if (stripeCustomer && stripeCustomer.status == "active") {
+                  createRemittance();
+                }else{
+                  setOpen(true)
+                }
+              }}
             >
               {loader ? (
                 <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />

@@ -2,11 +2,11 @@ import { ErrorOutline } from "@mui/icons-material";
 import { Button, Checkbox, CircularProgress, InputBase } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Login = () => {
- 
+const ResetPassword = () => {
+    const { token } = useParams();
   useEffect(()=> {
     if(localStorage.getItem('access')){
       navigate('/dashboard')
@@ -25,28 +25,38 @@ const Login = () => {
     twilio_account_api_key: "",
     password: "",
     agreed: false,
+    confirm_password :''
   });
 
 
 
-  const login = async() => {
+  const resetPassword = async() => {
     setLoader(true)
-    let response = await axios.post(process.env.REACT_APP_BACKEND_URL+'region/login', {
-      email : region.email, password : region.password
+  
+    console.log({token})
+   if(region.confirm_password != region.password){
+    toast('Password confirmation does not match')
+
+   }else{
+    let response = await axios.post(process.env.REACT_APP_BACKEND_URL+'reset-password', {
+        newPassword : region.password, token
     })
     .then((res)=>{
       console.log(res.data)
       setLoader(false)
-      localStorage.setItem('region', JSON.stringify(res.data.region))
-      localStorage.setItem('access', JSON.stringify(res.data.access))
+      toast(res.data.message+' navigating to login page')
+     
       navigate('/dashboard')
 
     })
     .catch((err)=> {
-      toast(err?.response?.data?.message)
+    //   toast(err?.response?.data?.message)
       setLoader(false)
+      toast(err.response.data.error)
       console.log(err)
+      navigate('/login')
     })
+   }
   
 
     
@@ -56,27 +66,7 @@ const Login = () => {
 
 
 
-  const sendForgotPasswordLink = async() => {
-    if(!region.email || region.email?.length < 1 ){
-      toast('Please add email first')
-    }
 
-    else{
-     await axios.post(process.env.REACT_APP_BACKEND_URL+'send-reset-link', {
-        recipient_email : region.email,
-      })
-
-      .then((res)=> {
-        console.log(res.data)
-        toast('Password reset link has been sent to '+region.email)
-      })
-      .catch((err)=> {
-        toast(err.response.data.error)
-      })
-
-      
-    }
-  }
   return (
     <div>
       <div className="grid lg:grid-cols-4">
@@ -85,7 +75,7 @@ const Login = () => {
             <img src="/icons/login_img.png" className="w-[50px]" />
           </div>
           <div className="text-center lg:text-[16px] mt-4  font-semibold ">
-            Login
+            Reset Password
           </div>
 
           {errorMsg && (
@@ -96,28 +86,8 @@ const Login = () => {
 
 
           
-
-
-          <div className="space-y-2 mb-3 mt-[100px]">
-            <div className=" lg:text-[14px] text-[13px] ">Email Address</div>
-            <InputBase
-              value={region.email}
-              onChange={(e) => {
-                setRegion({ ...region, email: e.target.value });
-              }}
-              placeholder="johnmichael@example.com"
-              sx={{
-                bgcolor: "#F7F7F8",
-                width: "100%",
-                px: 2,
-                py: "2px",
-                fontSize: "14px",
-              }}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className=" lg:text-[14px] text-[13px] ">Password</div>
+<div className="space-y-2 mt-[100px] mb-3">
+            <div className=" lg:text-[14px] text-[13px] ">New Password</div>
             <InputBase
               // type={showPassword ? "text" : "password"}
               type={"password"}
@@ -141,33 +111,33 @@ const Login = () => {
                 py: "2px",
                 fontSize: "14px",
               }}
+              placeholder="*********"
             />
           </div>
 
 
-          <span
-              className="text-[#605BFF] hover:underline cursor-pointer text-[14px] mt-2 "
-              onClick={() => {
-                sendForgotPasswordLink()
+
+          <div className="space-y-2 mb-3 ">
+            <div className=" lg:text-[14px] text-[13px] ">Confirm Password</div>
+            <InputBase
+              value={region.confirm_password}
+              type={"password"}
+              onChange={(e) => {
+                setRegion({ ...region, confirm_password: e.target.value });
               }}
-            >
-              {" "}
-            Forgot Password ?
-            </span>
-
-
-          {/* <div className="flex items-center justify-between mt-2">
-          
-            <div
-              className="text-[#605BFF] lg:text-[13px] text-[12px] hover:underline cursor-pointer "
-              onClick={() => {
-                navigate("/forgot-password");
-
+              placeholder="*********"
+              sx={{
+                bgcolor: "#F7F7F8",
+                width: "100%",
+                px: 2,
+                py: "2px",
+                fontSize: "14px",
               }}
-            >
-              Forgot Password ?
-            </div>
-          </div> */}
+            />
+          </div>
+
+        
+
 
         
           <div className="flex justify-center pt-6 pb-4 space-x-2">
@@ -182,27 +152,18 @@ const Login = () => {
                 fontSize: { lg: "14px", xs: "13px" },
                 width: "100%",
               }}
-              onClick={login}
+              onClick={resetPassword}
               disabled={loader}
             >
               {loader ? (
                 <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
               ) : (
-                "Login"
+                "Reset Password"
               )}
             </Button>
           </div>
 
-          <div className="text-black text-center lg:text-[13px] text-[12px] ">
-            Dont have an account?{" "}
-            <span
-              className="text-[#605BFF] hover:underline cursor-pointer "
-              onClick={() => navigate("/register")}
-            >
-              {" "}
-            Register
-            </span>
-          </div>
+       
 
           
         </div>
@@ -215,4 +176,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

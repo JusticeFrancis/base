@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard'
 import MemberForm from './components/forms/MemberForm'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ResetPassword from './components/auth/ResetPassword'
 
 const Main = () => {
   
@@ -17,6 +18,7 @@ const Main = () => {
             <Route path="/membership-form/:region_id" element={<MemberForm/>} />
               <Route path="/register" element={<CreateRegion/>} />
               <Route path="/login" element={<Login/>} />
+              <Route path="/reset-password/:token" element={<ResetPassword/>} />
               <Route path="/dashboard/*" element={<Dashboard/>} />
               <Route path="/" element={<Dashboard/>} />
             </Routes>

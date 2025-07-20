@@ -30,12 +30,12 @@ const TemplateModal = ({ open, setOpen, loader, setLoader, bulkEmail, setBulkEma
       formData
     );
 
-    console.log(img.data);
+    console.log(img?.data);
     }
 
 
 
-    console.log(img.data.imageUrl)
+    console.log(img?.data?.imageUrl)
   
     let email = await axios.post(
      
@@ -48,7 +48,7 @@ const TemplateModal = ({ open, setOpen, loader, setLoader, bulkEmail, setBulkEma
     ).then((res)=> {
       setLoader(false)
       toast('Successful')
-      console.log(res.data)
+      console.log(res)
       setOpen(false)
      setBulkEmail({
         link: null,

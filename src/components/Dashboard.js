@@ -13,6 +13,7 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
   CircularProgress,
   Menu,
   MenuItem,
@@ -30,17 +31,20 @@ import BulkSms from "./dashboard/BulkSms";
 import BulkEmail from "./dashboard/BulkEmail";
 import Remittance from "./dashboard/Remittance";
 import Settings from "./dashboard/Settings";
+import axios from "axios";
 
 const Dashboard = () => {
-   const [region, setRegion] = useState(JSON.parse(localStorage.getItem('region')))
-    const [access, setAccess] = useState(JSON.parse(localStorage.getItem('access')))
-    useEffect(()=>{
-
-      if(!localStorage.getItem('access')){
-        navigate('/login')
-      }
-
-    },[])
+  const [region, setRegion] = useState(
+    JSON.parse(localStorage.getItem("region"))
+  );
+  const [access, setAccess] = useState(
+    JSON.parse(localStorage.getItem("access"))
+  );
+  useEffect(() => {
+    if (!localStorage.getItem("access")) {
+      navigate("/login");
+    }
+  }, []);
   const [openSidebar, setOpenSidebar] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,6 +71,40 @@ const Dashboard = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const [stripeCustomer, setStripeCustomer] = useState();
+  const getStripeCustomer = async () => {
+    let stripe_customer = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "stripe/get",
+      {
+        stripe_id: region?.stripe_id,
+      }
+    );
+    console.log("stripe_customer", stripe_customer.data);
+
+    setStripeCustomer(stripe_customer.data.subscription);
+  };
+  useEffect(() => {
+    if (region) {
+      getStripeCustomer();
+    }
+  }, [region]);
+
+  const subscribeToMonthlyPlan = async () => {
+    setLoader(true);
+    let res = await axios.post(
+      process.env.REACT_APP_BACKEND_URL + "stripe/pay",
+      {
+        stripe_id: region?.stripe_id,
+      }
+    );
+
+    window.open(res.data.url, "_blank");
+
+    setLoader(false);
+
+    console.log(res.data);
   };
   return (
     <div>
@@ -197,78 +235,77 @@ const Dashboard = () => {
                     </div>
                   )}
 
-                {region?.hasdenominations && (
-                  <>
-                    {  location.pathname.startsWith("/dashboard/provinces") ? (
-                    <div
-                      onClick={() => {
-                        navigate("/dashboard/provinces");
-                      }}
-                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
-                    >
-                      {" "}
-                      <Castle
-                        sx={{
-                          fontSize: "20px",
-                          mr: "9px",
-                        }}
-                      />
-                      Provinces{" "}
-                    </div>
-                  ) : (
-                    <div
-                      className="cursor-pointer pl-9   flex items-center py-2 px-3 text-[#7f7f92]"
-                      onClick={() => {
-                        navigate("/dashboard/provinces");
-                      }}
-                    >
-                      {" "}
-                      <Castle
-                        sx={{
-                          fontSize: "20px",
-                          mr: "9px",
-                        }}
-                      />
-                      Provinces{" "}
-                    </div>
-                  )}
+                  {region?.hasdenominations && (
+                    <>
+                      {location.pathname.startsWith("/dashboard/provinces") ? (
+                        <div
+                          onClick={() => {
+                            navigate("/dashboard/provinces");
+                          }}
+                          className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                        >
+                          {" "}
+                          <Castle
+                            sx={{
+                              fontSize: "20px",
+                              mr: "9px",
+                            }}
+                          />
+                          Provinces{" "}
+                        </div>
+                      ) : (
+                        <div
+                          className="cursor-pointer pl-9   flex items-center py-2 px-3 text-[#7f7f92]"
+                          onClick={() => {
+                            navigate("/dashboard/provinces");
+                          }}
+                        >
+                          {" "}
+                          <Castle
+                            sx={{
+                              fontSize: "20px",
+                              mr: "9px",
+                            }}
+                          />
+                          Provinces{" "}
+                        </div>
+                      )}
 
-                  {location.pathname.startsWith("/dashboard/parishes") ? (
-                    <div
-                      onClick={() => {
-                        navigate("/dashboard/parishes");
-                      }}
-                      className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
-                    >
-                      {" "}
-                      <Church
-                        sx={{
-                          fontSize: "20px",
-                          mr: "9px",
-                        }}
-                      />
-                      Parishes
-                    </div>
-                  ) : (
-                    <div
-                      className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-                      onClick={() => {
-                        navigate("/dashboard/parishes");
-                      }}
-                    >
-                      {" "}
-                      <Church
-                        sx={{
-                          fontSize: "20px",
-                          mr: "9px",
-                        }}
-                      />
-                      Parishes
-                    </div>
+                      {location.pathname.startsWith("/dashboard/parishes") ? (
+                        <div
+                          onClick={() => {
+                            navigate("/dashboard/parishes");
+                          }}
+                          className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+                        >
+                          {" "}
+                          <Church
+                            sx={{
+                              fontSize: "20px",
+                              mr: "9px",
+                            }}
+                          />
+                          Parishes
+                        </div>
+                      ) : (
+                        <div
+                          className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+                          onClick={() => {
+                            navigate("/dashboard/parishes");
+                          }}
+                        >
+                          {" "}
+                          <Church
+                            sx={{
+                              fontSize: "20px",
+                              mr: "9px",
+                            }}
+                          />
+                          Parishes
+                        </div>
+                      )}
+                    </>
                   )}
-
-</>
-                )}
                   {location.pathname.startsWith("/dashboard/members") ? (
                     <div
                       onClick={() => {
@@ -435,6 +472,47 @@ const Dashboard = () => {
                     </div>
                   )}
                 </div>
+
+                {(!stripeCustomer || stripeCustomer.status !== "active") && (
+                  <div className="bg-red-50 border border-t-red-200  p-5 max-w-md mx-auto my-6 shadow-sm">
+                    <div className="text-center">
+                      <h3 className="text-red-600 text-lg font-semibold mb-2">
+                        No Active Plan
+                      </h3>
+                      <p className="text-gray-700 text-sm mb-4">
+                        You currently don’t have an active subscription.
+                        Subscribe now to unlock premium features.
+                      </p>
+
+                      <Button
+                        sx={{
+                          textTransform: "none",
+                          bgcolor: "#605BFF",
+                          color: "white",
+                          py: "6px",
+                          px: "24px",
+                          borderRadius: "6px",
+                          fontSize: { lg: "14px", xs: "13px" },
+                          "&:hover": {
+                            bgcolor: "#4b48e5",
+                          },
+                        }}
+                        disabled={loader}
+                        onClick={subscribeToMonthlyPlan}
+                      >
+                        {loader ? (
+                          <CircularProgress
+                            size={"1.3rem"}
+                            sx={{ color: "white" }}
+                          />
+                        ) : (
+                          "Subscribe to Monthly Plan"
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 {err_msg && (
                   <div className="text-center text-red-500 lg:text-[13px] text-[12px] mt-2  font-semibold ">
                     <ErrorOutline sx={{ fontSize: "" }} /> {err_msg}
@@ -481,14 +559,14 @@ const Dashboard = () => {
 
                 <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
                   <div className=" text-[14px]  font-semibold flex capitalize">
-                  {access?.access_level}
+                    {access?.access_level}
                     {/* <span className="text-[13px] font-normal">(Province)</span> */}
                     <img
                       src="/icons/Logout.png"
                       className="w-[20px] ml-2 cursor-pointer"
                       onClick={() => {
-                        localStorage.clear('region')
-                      localStorage.clear('access')
+                        localStorage.clear("region");
+                        localStorage.clear("access");
                         navigate("/login");
                       }}
                     />{" "}

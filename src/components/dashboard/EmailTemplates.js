@@ -18,7 +18,7 @@ const EmailTemplates = ({template, email}) =>{
           {email.img ? (
               <img src={URL.createObjectURL(email.img)}/>
           ): (
-            <img className="" src="https://img.freepik.com/premium-vector/dummy-text-headline-flyer-design-template-use-vertical-layout-combination-yellow-orange-purple_64718-861.jpg"/>
+            <img className="" src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"/>
           )}
              </div>
       )}

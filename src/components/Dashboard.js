@@ -191,7 +191,7 @@ const Dashboard = () => {
             <div className="text-[20px] font-normal  text-center mx-auto flex items-center space-x-2  ">
               <img src="/icons/login_img.png" className="w-[30px] hidden" />
               <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                <img src={region?.logo} className="w-[30px]" />{" "}
+                <img src={region?.logo || 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg'} className="w-[30px]" />{" "}
                 <div>{region?.name}</div>
               </div>
             </div>
@@ -200,7 +200,7 @@ const Dashboard = () => {
             <div className="col-span-2 w-[220px]   flex-col min-h-[100vh] h-full hidden lg:flex ">
               <div className="bg-white relative  min-h-[100vh] h-full ">
                 <div className="text-[16px] px-6   text-center font-semibold my-3 flex  space-x-3 items-center">
-                  <img src={region?.logo} className="w-[30px]" />{" "}
+                  <img src={region?.logo || 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg'} className="w-[30px]" />{" "}
                   <div>{region?.name}</div>
                 </div>
                 <div className="text-[16px]  pr-6 space-y-3  flex-1">

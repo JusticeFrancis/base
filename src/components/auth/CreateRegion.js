@@ -33,20 +33,22 @@ const CreateRegion = () => {
     if (region.agreed) {
       try {
         setLoader(true);
-
+        let img = null
+      if(region.logo){
         const formData = new FormData();
         formData.append("image", region.logo);
-        let img = await axios.post(
+        img = await axios.post(
           process.env.REACT_APP_BACKEND_URL + "upload",
           formData
         );
 
         console.log(img.data);
+      }
 
         let response = await axios
           .post(process.env.REACT_APP_BACKEND_URL + "region/create", {
             ...region,
-            logo: img.data.imageUrl,
+            logo: img?.data?.imageUrl || null,
           })
           .then((res) => {
             toast("success");
@@ -227,46 +229,60 @@ const CreateRegion = () => {
               </div>
             </div>
 
-          <div className="mt-[20px] mb-3 flex items-center space-x-4 ">
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              id="logo"
-              onChange={(e) => {
-                let file = e.target.files[0];
-                setRegion({ ...region, logo: file });
-              }}
-            />
+            <div className="mt-5 mb-3 flex items-center space-x-5">
+  {/* Hidden file input */}
+  <input
+    hidden
+    type="file"
+    accept="image/*"
+    id="logo"
+    onChange={(e) => {
+      let file = e.target.files[0];
+      setRegion({ ...region, logo: file });
+    }}
+  />
 
-            <Button
-              onClick={() => {
-                let logo = document.getElementById("logo");
-                logo.click();
-              }}
-              sx={{
-                textTransform: "none",
-                bgcolor: "#605BFF",
-                color: "white",
-                py: "2px",
-                px: "20px",
-                borderRadius: "7px",
-                fontSize: { lg: "14px", xs: "13px" },
-                width: "fit",
-              }}
-              disabled={loader}
-            >
-              {loader ? (
-                <CircularProgress size={"1.3rem"} sx={{ color: "white" }} />
-              ) : (
-                "Upload logo"
-              )}
-            </Button>
-            <img
-              src={region.logo && URL.createObjectURL(region.logo)}
-              className="w-[50px] border-[1px] rounded-full"
-            />
-          </div>
+  {/* Upload Button */}
+  <Button
+    onClick={() => {
+      document.getElementById("logo").click();
+    }}
+    sx={{
+      textTransform: "none",
+      bgcolor: "#605BFF",
+      color: "white",
+      py: "3px",
+      px: "24px",
+      borderRadius: "10px",
+      fontSize: { lg: "15px", xs: "14px" },
+      boxShadow: "0 2px 10px rgba(96, 91, 255, 0.3)",
+      transition: "background-color 0.3s ease",
+      '&:hover': {
+        bgcolor: "#4b47d6",
+      },
+      width: "auto",
+    }}
+    disabled={loader}
+    aria-label="Upload logo"
+  >
+    {loader ? (
+      <CircularProgress size={"1.4rem"} sx={{ color: "white" }} />
+    ) : (
+      "Upload Logo"
+    )}
+  </Button>
+
+  {/* Logo preview */}
+  {region.logo && (
+    <img
+      src={URL.createObjectURL(region.logo)}
+      alt="Logo Preview"
+      className="w-14 h-14 rounded-full border-2 border-purple-600 object-cover shadow-md"
+      onLoad={(e) => URL.revokeObjectURL(e.target.src)} // clean up URL object
+    />
+  )}
+</div>
+
 
           <div className="flex items-center space-x-3  mt-2">
             <div className="flex items-center">
@@ -320,6 +336,7 @@ const CreateRegion = () => {
                 borderRadius: "7px",
                 fontSize: { lg: "14px", xs: "13px" },
                 width: "100%",
+                boxShadow: "0 2px 10px rgba(96, 91, 255, 0.3)",
               }}
               disabled={loader}
               onClick={createRegion}

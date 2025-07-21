@@ -1,100 +1,108 @@
 import {
-    Button,
-    CircularProgress,
-    Drawer,
-    Menu,
-    MenuItem,
-    Radio,
-    Select,
-  } from "@mui/material";
-  import {
-    Dashboard as DashboardIcon,
-    DashboardCustomize,
-    ErrorOutline,
-    KeyboardArrowDown,
-    SettingsInputComponent,
-    KeyboardArrowRight,
-    Logout,
-    Support,
-    SupportAgent,
-    Money,
-    Email,
-    Sms,
-    People,
-    Church,
-    Castle,
-  } from "@mui/icons-material";
-  import React, { useState } from "react";
-  import { useLocation, useNavigate } from "react-router-dom";
-  
-  const Sidebar = ({ open, setOpen, orgs }) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [region, setRegion] = useState(JSON.parse(localStorage.getItem("region")));
-  
-    const [err_msg, setErrorMsg] = useState(null);
-    const [loader, setLoader] = useState(false);
-    
-    console.log();
-  
-     const [anchorEl, setAnchorEl] = useState(null);
-      const open_ = Boolean(anchorEl);
-    
-      const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
-    
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
-    return (
-      <Drawer open={open} onClose={() => setOpen(false)}>
-        <div className="text-[16px] space-y-3 bg-white   flex-1 w-[200px]">
-          {location.pathname === '/dashboard' || location.pathname.startsWith('/dashboard/call-details') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard");
-              }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <img src="/icons/dash-active.png" className="w-[20px] mr-2" />{" "}
-              Dashboard{" "}
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard");
-              }}
-            >
-              {" "}
-              <img
-                src="/icons/dash-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
-              Dashboard{" "}
-            </div>
-          )}
-  
-         {region?.hasdenominations && (
+  Button,
+  CircularProgress,
+  Drawer,
+  Menu,
+  MenuItem,
+  Radio,
+  Select,
+} from "@mui/material";
+import {
+  Dashboard as DashboardIcon,
+  DashboardCustomize,
+  ErrorOutline,
+  KeyboardArrowDown,
+  SettingsInputComponent,
+  KeyboardArrowRight,
+  Logout,
+  Support,
+  SupportAgent,
+  Money,
+  Email,
+  Sms,
+  People,
+  Church,
+  Castle,
+} from "@mui/icons-material";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const Sidebar = ({ open, setOpen, orgs }) => {
+   const [access, setAccess] = useState(
+      JSON.parse(localStorage.getItem("access"))
+    );
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [region, setRegion] = useState(
+    JSON.parse(localStorage.getItem("region"))
+  );
+
+  const [err_msg, setErrorMsg] = useState(null);
+  const [loader, setLoader] = useState(false);
+
+  console.log();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open_ = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <Drawer open={open} onClose={() => setOpen(false)}>
+      <div className="text-[16px] space-y-3 bg-white   flex-1 w-[200px]">
+        {location.pathname === "/dashboard" ||
+        location.pathname.startsWith("/dashboard/call-details") ? (
+          <div
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard");
+            }}
+            className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+          >
+            {" "}
+            <img src="/icons/dash-active.png" className="w-[20px] mr-2" />{" "}
+            Dashboard{" "}
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard");
+            }}
+          >
+            {" "}
+            <img
+              src="/icons/dash-inactive.png"
+              className="w-[20px] mr-2"
+            />{" "}
+            Dashboard{" "}
+          </div>
+        )}
+
+        {region?.hasdenominations && (
           <>
-           {location.pathname.startsWith('/dashboard/Provinces') 
-            ? (
+            {location.pathname.startsWith("/dashboard/Provinces") ? (
               <div
                 onClick={() => {
                   setOpen(false);
                   navigate("/dashboard/Provinces");
                 }}
-                className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
+                className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+              >
                 {" "}
                 <Castle
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              /> Provinces
+                  sx={{
+                    fontSize: "20px",
+                    mr: "9px",
+                  }}
+                />{" "}
+                Provinces
               </div>
             ) : (
               <div
@@ -106,88 +114,90 @@ import {
               >
                 {" "}
                 <Castle
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-              Provinces
+                  sx={{
+                    fontSize: "20px",
+                    mr: "9px",
+                  }}
+                />
+                Provinces
               </div>
             )}
-  
-          {location.pathname.startsWith('/dashboard/Parishes') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/Parishes");
-              }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <Church
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-             Parishes
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/Parishes");
-              }}
-            >
-              {" "}
-              <Church
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-             Parishes
-            </div>
-          )}
+
+            {location.pathname.startsWith("/dashboard/Parishes") ? (
+              <div
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/dashboard/Parishes");
+                }}
+                className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+              >
+                {" "}
+                <Church
+                  sx={{
+                    fontSize: "20px",
+                    mr: "9px",
+                  }}
+                />
+                Parishes
+              </div>
+            ) : (
+              <div
+                className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/dashboard/Parishes");
+                }}
+              >
+                {" "}
+                <Church
+                  sx={{
+                    fontSize: "20px",
+                    mr: "9px",
+                  }}
+                />
+                Parishes
+              </div>
+            )}
           </>
-         )}
-  
-          {location.pathname.startsWith('/dashboard/members') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/members");
+        )}
+
+        {location.pathname.startsWith("/dashboard/members") ? (
+          <div
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/members");
+            }}
+            className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+          >
+            {" "}
+            <People
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
               }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <People
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
+            />
             Members
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/members");
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/members");
+            }}
+          >
+            {" "}
+            <People
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
               }}
-            >
-              {" "}
-              <People
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
+            />
             Members
-            </div>
-          )}
-  
-          {/* {location.pathname.startsWith('/dashboard/bulk-sms') ? (
+          </div>
+        )}
+
+        {/* {location.pathname.startsWith('/dashboard/bulk-sms') ? (
             <div
               onClick={() => {
                 setOpen(false);
@@ -221,118 +231,118 @@ import {
             Bulk Sms
             </div>
           )} */}
-  
-          {location.pathname.startsWith('/dashboard/bulk-email') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/bulk-email");
-              }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <Email
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-            Bulk Emails
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/bulk-email");
-              }}
-            >
-              {" "}
-              <Email
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-            Bulk Emails
-            </div>
-          )}
 
-
-{location.pathname.startsWith('/dashboard/remittance') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/remittance");
+        {location.pathname.startsWith("/dashboard/bulk-email") ? (
+          <div
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/bulk-email");
+            }}
+            className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+          >
+            {" "}
+            <Email
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
               }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <Money
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
+            />
+            Bulk Emails
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/bulk-email");
+            }}
+          >
+            {" "}
+            <Email
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
               }}
-              />
-             Remmittance
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/remittance");
-              }}
-            >
-              {" "}
-              <Money
-              sx={{ 
-                fontSize:'20px',
-                mr:'9px'
-              }}
-              />
-             Remmittance
-            </div>
-          )}
-          {location.pathname.startsWith('/dashboard/settings') ? (
-            <div
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/settings");
-              }}
-              className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3">
-              {" "}
-              <img
-                src="/icons/settings-active.png"
-                className="w-[20px] mr-2"
-              />{" "}
-             Settings
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
-              onClick={() => {
-                setOpen(false);
-                navigate("/dashboard/settings");
-              }}
-            >
-              {" "}
-              <img
-                src="/icons/settings-inactive.png"
-                className="w-[20px] mr-2"
-              />{" "}
-             Settings
-            </div>
-          )}
-        </div>
-  
-        {err_msg && (
-          <div className="text-center text-red-500 lg:text-[13px] text-[12px] mt-2  font-semibold ">
-            <ErrorOutline sx={{ fontSize: "" }} /> {err_msg}
+            />
+            Bulk Emails
           </div>
         )}
-  
-  
-  
-        {/* <div className=" flex justify-center  items-center py-2 px-3 font-semibold ">
+
+        {location.pathname.startsWith("/dashboard/remittance") ? (
+          <div
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/remittance");
+            }}
+            className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+          >
+            {" "}
+            <Money
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
+              }}
+            />
+            Remmittance
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/remittance");
+            }}
+          >
+            {" "}
+            <Money
+              sx={{
+                fontSize: "20px",
+                mr: "9px",
+              }}
+            />
+            Remmittance
+          </div>
+        )}
+        {location.pathname.startsWith("/dashboard/settings") ? (
+          <div
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/settings");
+            }}
+            className="cursor-pointer pl-9 flex items-center text-[#605CFF] bg-gradient-to-r from-[#EBEBFC] to-[#fff] py-2 px-3"
+          >
+            {" "}
+            <img
+              src="/icons/settings-active.png"
+              className="w-[20px] mr-2"
+            />{" "}
+            Settings
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer pl-9 flex items-center py-2 px-3 text-[#7f7f92]"
+            onClick={() => {
+              setOpen(false);
+              navigate("/dashboard/settings");
+            }}
+          >
+            {" "}
+            <img
+              src="/icons/settings-inactive.png"
+              className="w-[20px] mr-2"
+            />{" "}
+            Settings
+          </div>
+        )}
+      </div>
+
+      {err_msg && (
+        <div className="text-center text-red-500 lg:text-[13px] text-[12px] mt-2  font-semibold ">
+          <ErrorOutline sx={{ fontSize: "" }} /> {err_msg}
+        </div>
+      )}
+
+      {/* <div className=" flex justify-center  items-center py-2 px-3 font-semibold ">
           {" "}
           <div className="space-y-2">
             <div className="text-left w-[130px]">
@@ -418,32 +428,28 @@ import {
             </div>
           </div>
         </div> */}
-  
-        <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
-                          <div className=" text-[14px]  font-semibold flex"  >
-                          Admin <span className="text-[13px] font-normal">(Province)</span>
-                            <img src="/icons/Logout.png" className="w-[20px] ml-2 cursor-pointer pl-9" 
-                    onClick={()=> {
-                      localStorage.clear('region')
-                      localStorage.clear('access')
-                      navigate('/login')
-                    }}
+
+      <div className="px-3  left-[10%]   absolute w-[80%] bottom-4 mt-auto bg-[#F7F7F8] py-1 rounded-lg">
+      <div className=" text-[14px]  font-semibold flex capitalize">
+                    {access?.access_level}
+                    {/* <span className="text-[13px] font-normal">(Province)</span> */}
+                    <img
+                      src="/icons/Logout.png"
+                      className="w-[20px] ml-2 cursor-pointer"
+                      onClick={() => {
+                        localStorage.clear("region");
+                        localStorage.clear("access");
+                        navigate("/login");
+                      }}
                     />{" "}
-                          </div>
-        
-                          <div className='text-[13px] text-black flex items-center justify-between'>
-                            <div>
-                            adminrccg@gmail.com
-                            </div>
-        
-                           
-        
-     
-                          </div>
-                        </div>
-      </Drawer>
-    );
-  };
-  
-  export default Sidebar;
-  
+                  </div>
+
+                  <div className="text-[13px] text-black flex items-center justify-between">
+                    <div>{access?.email}</div>
+                  </div>
+      </div>
+    </Drawer>
+  );
+};
+
+export default Sidebar;

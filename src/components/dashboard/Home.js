@@ -84,7 +84,7 @@ getRemittances()
              toast('link copied to clipboard')
           }}
           className="text-[13px] mr-2 hover:underline hover:text-blue-500 cursor-pointer"> <span className="hidden lg:inline">Share membership form for region</span> <Send sx={{fontSize:"", position:'relative', bottom: 1}}/></div>
-        <div className=" text-green-700">({region?.currency == 'dollar' && '$'})  {remittances.reduce((sum, remit) => sum + remit.amount, 0)}</div>
+        <div className=" text-green-700">({region?.currency == 'dollar' && '$'})  {(remittances.reduce((sum, remit) => sum + remit.amount, 0)).toLocaleString()}</div>
         </div>
       </div>
 

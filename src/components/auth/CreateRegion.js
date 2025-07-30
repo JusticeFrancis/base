@@ -76,7 +76,7 @@ const CreateRegion = () => {
       <div className="grid lg:grid-cols-4">
         <div className="col-span-1 lg:pt-[50px] pt-[20px]  bg-white lg:min-h-[100vh] min-h-[100vh] relative px-8  lg:my-0">
           <div className="flex items-center justify-center">
-            <img src="/icons/login_img.png" className="w-[50px]" />
+            <img src="/icons/zion.png" className="w-[50px]" />
           </div>
           <div className="text-center lg:text-[16px] mt-4  font-semibold ">
             Sign Up

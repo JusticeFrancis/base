@@ -5,7 +5,10 @@ const EmailTemplates = ({template, email}) =>{
   
   <div style={styles.card} className="w-full">
     <div style={styles.avatarContainer} className="bg-[#0044cc] text-white rounded-t-[10px] py-2 font-bold text-left px-4">
-    Title
+    <div style={{display: "flex", alignItems: "center",gap: "10px"}}>
+  <img src="http://base123-c1ed55115e86.herokuapp.com/icons/zion.png"  alt="Zion Icon" />
+  <span>Title</span>
+</div>
     </div>
     <div style={styles.content} className="text-left px-8 text-[15px]">
       <div  className="text-[15px]" >Dear Username,</div>
